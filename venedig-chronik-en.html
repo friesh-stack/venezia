@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Venice Chronicle – The Lagoon from the Veneti to the Biennale</title>
+<style>
+:root{
+  --papier:#f6f1e4;
+  --tinte:#22303a;
+  --lagune:#12606d;
+  --lagune-hell:#e3edec;
+  --sanmarco:#9e2b25;
+  --gold:#b8862b;
+  --linie:#d8cfba;
+  --karte:#fffdf6;
+  --grau:#6b6455;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--papier);
+  color:var(--tinte);
+  font-family:Georgia,'Times New Roman',serif;
+  line-height:1.65;
+}
+/* ── Burano-Streifen: Signatur der Chronik ── */
+.burano-streifen{display:flex;height:8px}
+.burano-streifen span{flex:1}
+.bs1{background:#c94f3d}.bs2{background:#e0a63a}.bs3{background:#2e7d6e}
+.bs4{background:#3d6fa8}.bs5{background:#b45f8e}.bs6{background:#d97941}
+.bs7{background:#5c8f3f}.bs8{background:#8a4fa8}
+
+header{
+  background:linear-gradient(180deg,#0c4550,#12606d);
+  color:#f3eddd;
+  padding:44px 20px 34px;
+  text-align:center;
+}
+header .ueber{
+  font-family:'Segoe UI',system-ui,sans-serif;
+  font-size:.75rem;letter-spacing:.28em;text-transform:uppercase;
+  color:#cfae5e;margin-bottom:12px;
+}
+header h1{
+  font-size:clamp(2rem,6vw,3.2rem);
+  font-weight:normal;letter-spacing:.02em;
+}
+header h1 b{color:#e9c979;font-weight:normal;font-style:italic}
+header p.unter{
+  max-width:640px;margin:14px auto 0;font-style:italic;
+  color:#d8e4e2;font-size:1.02rem;
+}
+.sprachen{
+  display:flex;flex-wrap:wrap;gap:6px;justify-content:center;
+  margin-top:16px;font-family:'Segoe UI',system-ui,sans-serif;font-size:.74rem;
+}
+.sprachen a{
+  color:#d8e4e2;text-decoration:none;border:1px solid rgba(216,228,226,.35);
+  border-radius:999px;padding:3px 11px;transition:all .15s;
+}
+.sprachen a:hover{border-color:#e9c979;color:#e9c979}
+.sprachen a.aktiv{background:#e9c979;color:#0c4550;border-color:#e9c979;font-weight:600}
+header .zeitspanne{
+  margin-top:18px;display:inline-block;
+  border:1px solid rgba(233,201,121,.5);border-radius:999px;
+  padding:6px 18px;font-family:'Segoe UI',system-ui,sans-serif;
+  font-size:.8rem;letter-spacing:.12em;color:#e9c979;
+}
+
+main{max-width:880px;margin:0 auto;padding:0 16px 60px}
+section.block{margin-top:52px}
+h2.bt{
+  font-size:1.55rem;font-weight:normal;color:var(--lagune);
+  border-bottom:2px solid var(--gold);padding-bottom:6px;margin-bottom:6px;
+}
+p.bt-sub{color:var(--grau);font-style:italic;margin-bottom:20px;font-size:.95rem}
+
+/* ── Einwohnerkurve ── */
+.kurve-box{
+  background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  padding:16px 12px 8px;box-shadow:0 2px 6px rgba(40,50,40,.06);
+}
+.kurve-box svg{width:100%;height:auto;display:block}
+.legende{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.78rem;
+  padding:10px 4px 6px;color:var(--grau);
+}
+.legende i{
+  display:inline-block;width:22px;height:4px;border-radius:2px;
+  vertical-align:middle;margin-right:6px;
+}
+.hinweis-klein{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.72rem;
+  color:var(--grau);text-align:center;padding-bottom:8px;
+}
+
+/* ── Filterchips (reines CSS über Radios) ── */
+.filter-anker{position:relative}
+input.fr{position:absolute;opacity:0;pointer-events:none}
+.chips{
+  position:sticky;top:0;z-index:50;
+  background:rgba(246,241,228,.96);backdrop-filter:blur(3px);
+  border-bottom:1px solid var(--linie);
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;
+  padding:10px 8px;margin-top:34px;
+}
+.chips label{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.8rem;
+  border:1px solid var(--linie);border-radius:999px;
+  padding:5px 13px;cursor:pointer;background:#fff;color:var(--tinte);
+  transition:all .15s;user-select:none;
+}
+.chips label:hover{border-color:var(--lagune)}
+#f-alle:checked~.chips label[for="f-alle"],
+#f-herrschaft:checked~.chips label[for="f-herrschaft"],
+#f-handel:checked~.chips label[for="f-handel"],
+#f-lagune:checked~.chips label[for="f-lagune"],
+#f-kultur:checked~.chips label[for="f-kultur"],
+#f-tourismus:checked~.chips label[for="f-tourismus"]{
+  background:var(--lagune);color:#fff;border-color:var(--lagune);
+}
+#f-herrschaft:checked~main .era:not([data-cat~="herrschaft"]),
+#f-handel:checked~main .era:not([data-cat~="handel"]),
+#f-lagune:checked~main .era:not([data-cat~="lagune"]),
+#f-kultur:checked~main .era:not([data-cat~="kultur"]),
+#f-tourismus:checked~main .era:not([data-cat~="tourismus"]){display:none}
+
+/* ── Epochen ── */
+.zeitleiste{position:relative;margin-top:26px}
+.zeitleiste::before{
+  content:"";position:absolute;left:9px;top:6px;bottom:6px;
+  width:2px;background:linear-gradient(180deg,var(--gold),var(--lagune));
+  opacity:.5;
+}
+details.era{
+  position:relative;margin:0 0 16px 30px;
+  background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  box-shadow:0 2px 5px rgba(40,50,40,.05);
+  overflow:hidden;
+}
+details.era::before{
+  content:"";position:absolute;left:-26px;top:22px;
+  width:12px;height:12px;border-radius:50%;
+  background:var(--gold);border:2px solid var(--papier);
+  box-shadow:0 0 0 2px var(--gold);
+}
+details.era[open]::before{background:var(--sanmarco);box-shadow:0 0 0 2px var(--sanmarco)}
+summary{
+  list-style:none;cursor:pointer;padding:15px 18px;
+  display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+}
+summary::-webkit-details-marker{display:none}
+summary:hover{background:#fbf7ec}
+.jahr{
+  font-family:'Segoe UI',system-ui,sans-serif;font-weight:700;
+  color:var(--sanmarco);font-size:.85rem;letter-spacing:.04em;
+  min-width:118px;
+}
+.era-titel{font-size:1.08rem;flex:1}
+.era-badges{display:flex;gap:5px;flex-wrap:wrap}
+.badge{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.64rem;
+  letter-spacing:.05em;text-transform:uppercase;
+  border-radius:4px;padding:2px 7px;color:#fff;
+}
+.b-herrschaft{background:#7a5a2e}.b-handel{background:#12606d}
+.b-lagune{background:#3d6fa8}.b-kultur{background:#8a4fa8}
+.b-tourismus{background:#c94f3d}
+.ew{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.68rem;
+  background:var(--lagune-hell);color:var(--lagune);
+  border:1px solid #bcd4d1;border-radius:4px;padding:2px 7px;
+}
+.era-inhalt{padding:2px 20px 16px;border-top:1px dashed var(--linie)}
+.era-inhalt p{margin:12px 0}
+.era-inhalt .vignette{
+  float:right;margin:6px 0 10px 16px;width:130px;opacity:.9;
+}
+.era-inhalt .vignette svg{width:100%;height:auto}
+.quelle{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.72rem;
+  color:var(--grau);margin-top:10px;
+}
+.quelle a{color:var(--lagune)}
+mark{background:#f2e3b6;padding:0 3px;border-radius:2px}
+
+/* ── Inselkarten ── */
+.insel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.insel{
+  background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  overflow:hidden;box-shadow:0 2px 5px rgba(40,50,40,.05);
+  display:flex;flex-direction:column;
+}
+.insel .kopfstreifen{height:6px}
+.insel .inh{padding:14px 16px 16px;flex:1}
+.insel h3{font-size:1.05rem;color:var(--lagune);font-weight:normal}
+.insel .rolle{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.68rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
+  margin:2px 0 8px;
+}
+.insel p{font-size:.9rem}
+.insel .zahl{
+  margin-top:10px;font-family:'Segoe UI',system-ui,sans-serif;
+  font-size:.74rem;color:var(--sanmarco);font-weight:600;
+}
+
+/* ── Lost Places ── */
+.lost{border-left:4px solid #55606a}
+.lost h3{color:#3d4750}
+.lost .rolle{color:#7a848d}
+
+/* ── Biennale-Sektion ── */
+.biennale{
+  background:linear-gradient(135deg,#fdf9ee,#f7efd9);
+  border:2px solid var(--gold);border-radius:12px;
+  padding:24px 24px 20px;box-shadow:0 3px 10px rgba(150,110,30,.12);
+}
+.biennale h2{
+  color:#7a5a1a;font-weight:normal;font-size:1.5rem;
+  display:flex;align-items:center;gap:10px;
+}
+.biennale .goldloewe{font-size:1.6rem}
+.termin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin:16px 0}
+.termin{
+  background:#fff;border:1px solid #e2d3a8;border-radius:8px;padding:12px 14px;
+}
+.termin .tt{
+  font-family:'Segoe UI',system-ui,sans-serif;font-size:.7rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--gold);
+}
+.termin .td{font-weight:600;color:var(--sanmarco);font-size:.95rem;
+  font-family:'Segoe UI',system-ui,sans-serif;margin:3px 0}
+.termin p{font-size:.85rem;color:var(--grau)}
+.termin.haupt{border:2px solid var(--gold);background:#fffdf4}
+
+/* ── Zukunft ── */
+.zukunft-liste{list-style:none;margin-top:14px}
+.zukunft-liste li{
+  background:var(--karte);border:1px solid var(--linie);border-radius:10px;
+  padding:14px 18px;margin-bottom:12px;position:relative;padding-left:52px;
+}
+.zukunft-liste li::before{
+  content:attr(data-icon);position:absolute;left:14px;top:12px;font-size:1.3rem;
+}
+.zukunft-liste b{color:var(--lagune)}
+
+/* ── Quellenverzeichnis / Fuß ── */
+.quellenverz{font-family:'Segoe UI',system-ui,sans-serif;font-size:.78rem;color:var(--grau)}
+.quellenverz li{margin-bottom:6px}
+.quellenverz a{color:var(--lagune)}
+footer{
+  margin-top:60px;background:#0c4550;color:#cfdedd;
+  text-align:center;padding:26px 16px;font-size:.85rem;
+}
+footer .fs{font-style:italic;color:#e9c979}
+
+@media(max-width:560px){
+  .jahr{min-width:auto}
+  .era-inhalt .vignette{width:96px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+details.era:focus-within{outline:2px solid var(--lagune);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="burano-streifen" aria-hidden="true">
+<span class="bs1"></span><span class="bs2"></span><span class="bs3"></span><span class="bs4"></span>
+<span class="bs5"></span><span class="bs6"></span><span class="bs7"></span><span class="bs8"></span>
+</div>
+
+<header>
+  <div class="ueber">A Chronicle of the Lagoon</div>
+  <h1>Venice <b>Chronicle</b></h1>
+  <p class="unter">From the ancient Veneti through the most glorious trading city of the Middle Ages
+  to the colourful islands, the Biennale and a lagoon that is wisely reinventing itself.</p>
+  <div class="zeitspanne">c. 1000 BC — 2026 and beyond</div>
+<nav class="sprachen" aria-label="Choose language">
+<a href="venedig-chronik.html">DE</a>
+<a class="aktiv" href="venedig-chronik-en.html">EN</a>
+<a href="venedig-chronik-it.html">IT</a>
+<a href="venedig-chronik-es.html">ES</a>
+<a href="venedig-chronik-fr.html">FR</a>
+<a href="venedig-chronik-pl.html">PL</a>
+<a href="venedig-chronik-zh.html">中文</a>
+<a href="venedig-chronik-ja.html">日本語</a>
+<a href="venedig-chronik-ar.html">العربية</a>
+<a href="venedig-chronik-pt.html">PT</a>
+</nav>
+</header>
+
+<div class="filter-anker">
+<input class="fr" type="radio" name="filter" id="f-alle" checked>
+<input class="fr" type="radio" name="filter" id="f-herrschaft">
+<input class="fr" type="radio" name="filter" id="f-handel">
+<input class="fr" type="radio" name="filter" id="f-lagune">
+<input class="fr" type="radio" name="filter" id="f-kultur">
+<input class="fr" type="radio" name="filter" id="f-tourismus">
+
+<div class="chips">
+  <label for="f-alle">All eras</label>
+  <label for="f-herrschaft">👑 Power</label>
+  <label for="f-handel">⚓ Trade</label>
+  <label for="f-lagune">🌊 Lagoon &amp; Climate</label>
+  <label for="f-kultur">🎭 Culture</label>
+  <label for="f-tourismus">🧭 Tourism</label>
+</div>
+
+<main>
+
+<!-- ═══════════ POPULATION CURVE ═══════════ -->
+<section class="block" id="einwohner">
+  <h2 class="bt">The Lagoon's Population Curve</h2>
+  <p class="bt-sub">Three fates on one (logarithmic) scale: proud Venice, colourful Burano,
+  and Torcello, which has almost vanished.</p>
+  <div class="kurve-box">
+    <svg viewBox="0 0 760 340" role="img" aria-label="Population of Venice, Burano and Torcello from 1500 to 2026">
+      <g stroke="#e4dcc8" stroke-width="1">
+        <line x1="60" y1="40"  x2="740" y2="40"/>
+        <line x1="60" y1="100" x2="740" y2="100"/>
+        <line x1="60" y1="160" x2="740" y2="160"/>
+        <line x1="60" y1="220" x2="740" y2="220"/>
+        <line x1="60" y1="280" x2="740" y2="280"/>
+      </g>
+      <g font-family="Segoe UI,sans-serif" font-size="11" fill="#8a8270">
+        <text x="55" y="44"  text-anchor="end">200,000</text>
+        <text x="55" y="104" text-anchor="end">50,000</text>
+        <text x="55" y="164" text-anchor="end">10,000</text>
+        <text x="55" y="224" text-anchor="end">1,000</text>
+        <text x="55" y="284" text-anchor="end">below 100</text>
+      </g>
+      <g font-family="Segoe UI,sans-serif" font-size="11" fill="#8a8270">
+        <text x="60"  y="305" text-anchor="middle">1500</text>
+        <text x="189" y="305" text-anchor="middle">1600</text>
+        <text x="318" y="305" text-anchor="middle">1700</text>
+        <text x="447" y="305" text-anchor="middle">1800</text>
+        <text x="577" y="305" text-anchor="middle">1900</text>
+        <text x="706" y="305" text-anchor="middle">2000</text>
+        <text x="740" y="305" text-anchor="middle">26</text>
+      </g>
+      <polyline fill="none" stroke="#9e2b25" stroke-width="3" stroke-linejoin="round"
+        points="60,63 150,40 232,72 444,58 540,61 643,42 669,71 708,89 740,101"/>
+      <polyline fill="none" stroke="#12606d" stroke-width="3" stroke-linejoin="round"
+        points="60,168 444,166 540,163 643,158 669,163 708,178 740,193"/>
+      <polyline fill="none" stroke="#b8862b" stroke-width="3" stroke-linejoin="round" stroke-dasharray="7 5"
+        points="60,190 189,222 444,250 577,268 643,253 740,288"/>
+      <circle cx="150" cy="40"  r="5" fill="#9e2b25"/>
+      <text x="150" y="28" font-family="Segoe UI,sans-serif" font-size="11" fill="#9e2b25" text-anchor="middle">1570: c. 175,000</text>
+      <circle cx="232" cy="72"  r="5" fill="#9e2b25"/>
+      <text x="236" y="90" font-family="Segoe UI,sans-serif" font-size="11" fill="#9e2b25">Plague 1630</text>
+      <circle cx="643" cy="42"  r="5" fill="#9e2b25"/>
+      <text x="640" y="30" font-family="Segoe UI,sans-serif" font-size="11" fill="#9e2b25" text-anchor="end">1951: c. 175,000</text>
+      <circle cx="740" cy="101" r="5" fill="#9e2b25"/>
+      <text x="732" y="118" font-family="Segoe UI,sans-serif" font-size="11" fill="#9e2b25" text-anchor="end">today: below 49,000</text>
+      <circle cx="643" cy="158" r="5" fill="#12606d"/>
+      <text x="636" y="150" font-family="Segoe UI,sans-serif" font-size="11" fill="#12606d" text-anchor="end">Burano ~6,000</text>
+      <circle cx="740" cy="193" r="5" fill="#12606d"/>
+      <text x="732" y="208" font-family="Segoe UI,sans-serif" font-size="11" fill="#12606d" text-anchor="end">~2,000</text>
+      <circle cx="740" cy="288" r="5" fill="#b8862b"/>
+      <text x="732" y="282" font-family="Segoe UI,sans-serif" font-size="11" fill="#b8862b" text-anchor="end">Torcello: ~10 residents</text>
+    </svg>
+    <div class="legende">
+      <span><i style="background:#9e2b25"></i>Venice (historic centre)</span>
+      <span><i style="background:#12606d"></i>Burano</span>
+      <span><i style="background:#b8862b"></i>Torcello (dashed)</span>
+    </div>
+    <div class="hinweis-klein">Figures rounded, based on historical estimates and official censuses; medieval Torcello probably had several thousand inhabitants – up to 20,000 according to legend.</div>
+  </div>
+</section>
+
+<!-- ═══════════ TIMELINE ═══════════ -->
+<section class="block" id="chronik">
+<h2 class="bt">The Chronicle</h2>
+<p class="bt-sub">Every era unfolds at a tap – filter via the bar above.</p>
+<div class="zeitleiste">
+
+<!-- Era 1 -->
+<details class="era" data-cat="lagune herrschaft">
+<summary><span class="jahr">before Christ</span><span class="era-titel">Veneti, Romans and an empty lagoon</span>
+<span class="era-badges"><span class="badge b-lagune">Lagoon</span><span class="badge b-herrschaft">Power</span></span></summary>
+<div class="era-inhalt">
+<div class="vignette"><svg viewBox="0 0 130 90"><g fill="none" stroke="#7a6a45" stroke-width="1.6" stroke-linecap="round"><path d="M8 70 Q 35 62 65 70 T 122 70"/><path d="M14 78 Q 40 72 70 78 T 118 78"/><path d="M30 70 L30 40 L55 40 L55 70"/><path d="M30 40 L42 28 L55 40"/><path d="M75 70 L75 50 L95 50 L95 70"/><line x1="36" y1="52" x2="48" y2="52"/><circle cx="108" cy="24" r="8"/></g></svg></div>
+<p>Long before a city stood in the water, the <mark>Veneti</mark> – the ancient people who gave the whole region its name – settled along the edge of the lagoon. Under Roman rule the mainland flourished: <mark>Altinum</mark> (near today's Altino), Aquileia, Padua and Oderzo were prosperous towns on the Via Annia. The lagoon itself was fishing ground, salt garden and waterway – inhabited only by fishermen on stilt dwellings, as the Roman official Cassiodorus famously described around 537: a people living "like waterfowl" between land and sea, whose entire wealth was salt.</p>
+<p>These modest beginnings already carried the seed of later Venice: whoever masters the channels, the tides and the salt, masters the lagoon.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/History_of_Venice" target="_blank" rel="noopener">Wikipedia – History of Venice</a></p>
+</div>
+</details>
+
+<!-- Era 2 -->
+<details class="era" data-cat="lagune herrschaft">
+<summary><span class="jahr">421 / 452–697</span><span class="era-titel">Flight into the lagoon – Torcello before Venice</span>
+<span class="era-badges"><span class="badge b-lagune">Lagoon</span><span class="badge b-herrschaft">Power</span></span></summary>
+<div class="era-inhalt">
+<p>The Migration Period shook Italy. When <mark>Attila's Huns destroyed Altinum and Aquileia in 452</mark>, followed a century later by the Lombards, the mainlanders fled to where no cavalry could follow: the islands of the lagoon. According to legend, Venice was founded on <mark>25 March 421</mark> – but what history can actually grasp first is something else: <b>Torcello</b>, not Rialto, became the first centre. In 639 the cathedral of Santa Maria Assunta was built there; its founding inscription survives to this day – the oldest dated document of the lagoon.</p>
+<p>Torcello grew into a veritable town with a bishop's seat, palaces and – so tradition has it – at times up to 20,000 inhabitants. That this very "mother of Venice" now counts barely a dozen residents is one of the great ironies of lagoon history.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Torcello" target="_blank" rel="noopener">Wikipedia – Torcello</a></p>
+</div>
+</details>
+
+<!-- Era 3 -->
+<details class="era" data-cat="herrschaft kultur">
+<summary><span class="jahr">697–1000</span><span class="era-titel">First doges, Rialto and the stolen evangelist</span>
+<span class="era-badges"><span class="badge b-herrschaft">Power</span><span class="badge b-kultur">Culture</span></span></summary>
+<div class="era-inhalt">
+<div class="vignette"><svg viewBox="0 0 130 90"><g fill="none" stroke="#7a6a45" stroke-width="1.6" stroke-linecap="round"><path d="M65 12 C 45 18 40 34 42 44 C 30 42 22 50 24 60 L 106 60 C 108 50 100 42 88 44 C 90 34 85 18 65 12 Z"/><path d="M55 60 L55 34 Q65 26 75 34 L75 60"/><path d="M40 68 Q 65 62 90 68"/><path d="M20 78 Q 65 70 110 78"/></g></svg></div>
+<p>In 697, tradition says, the lagoon islands elected their first <mark>doge</mark> – formally still subjects of Byzantium, in practice increasingly independent. After repelling a Frankish attack, the seat of government moved in <mark>810 to the sheltered island group of Rialto</mark> ("rivus altus", deep channel) – the birth of the city of Venice in the narrower sense.</p>
+<p>In 828 came the greatest PR coup of the Middle Ages: Venetian merchants smuggled the <mark>relics of St Mark the Evangelist</mark> out of Alexandria – hidden under pork, which the Muslim customs officers would not touch. The winged Lion of St Mark became the state emblem, St Mark's Basilica the heart of the city, and Venice henceforth had a patron saint of the first rank. Around the year 1000 Doge Pietro II Orseolo secured the Adriatic – ever since, the doge symbolically "married" the sea each year (Sposalizio del Mare).</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Republic_of_Venice" target="_blank" rel="noopener">Wikipedia – Republic of Venice</a></p>
+</div>
+</details>
+
+<!-- Era 4 -->
+<details class="era" data-cat="herrschaft handel">
+<summary><span class="jahr">1000–1204</span><span class="era-titel">Rise to sea power – and the coup of 1204</span>
+<span class="era-badges"><span class="badge b-herrschaft">Power</span><span class="badge b-handel">Trade</span></span></summary>
+<div class="era-inhalt">
+<p>With the Crusades, Venice became indispensable: whoever wanted to reach the Holy Land needed ships – and nobody built them faster than the <mark>Arsenal</mark>, the state shipyard founded in 1104, arguably Europe's first "factory". Venice charged for transport and supplies with trading privileges across the whole Levant.</p>
+<p>The peak of ruthlessness and business acumen combined: the aged, nearly blind Doge <mark>Enrico Dandolo</mark> simply redirected the Fourth Crusade in 1204 to the Christian city of <mark>Constantinople</mark>. The richest city in the world was plundered; Venice secured "a quarter and half a quarter" of the Byzantine Empire – Crete, Euboea, strongholds along every important route. The four bronze horses above the portal of St Mark's are loot from Constantinople to this day.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Fourth_Crusade" target="_blank" rel="noopener">Wikipedia – Fourth Crusade</a></p>
+</div>
+</details>
+
+<!-- Era 5 -->
+<details class="era" data-cat="handel">
+<summary><span class="jahr">13th–15th c.</span><span class="era-titel">The trading empire: what came, what went</span><span class="ew">up to ~150,000 inhabitants</span>
+<span class="era-badges"><span class="badge b-handel">Trade</span></span></summary>
+<div class="era-inhalt">
+<div class="vignette"><svg viewBox="0 0 130 90"><g fill="none" stroke="#7a6a45" stroke-width="1.6" stroke-linecap="round"><path d="M20 62 L110 62 L98 76 L32 76 Z"/><line x1="55" y1="62" x2="55" y2="16"/><path d="M55 18 Q 88 26 55 48"/><path d="M55 22 Q 30 30 55 44"/><path d="M8 82 Q 65 74 122 82"/><circle cx="112" cy="18" r="6"/></g></svg></div>
+<p>In the late Middle Ages Venice, with at times 100,000 to 150,000 inhabitants, was one of Europe's largest cities – and by far the richest hub between Orient and Occident. The system was brilliantly simple: <b>everything ran through the Rialto.</b></p>
+<p><b>What came into the lagoon:</b> <mark>spices</mark> (pepper, cinnamon, nutmeg, ginger) from India and Southeast Asia via <mark>Alexandria</mark> and the Levantine ports; <mark>silk, cotton, carpets, dyes and gemstones</mark> via Constantinople and the Black Sea colonies; grain from Apulia and the Crimea; slaves, wax and furs from the East. Marco Polo, who set off from here for the Silk Road in 1271, was merely the most famous of thousands of Venetian long-distance traders.</p>
+<p><b>What left the lagoon:</b> <mark>salt</mark> from Venice's own salt pans (the "white gold", a state monopoly), <mark>glass from Murano</mark> – the furnaces were forcibly moved to the island in 1291, for fire safety and to guard the trade secrets –, fine woollens, silk fabrics, weapons, paper and books. And the spices themselves: Venice bought in the Orient and sold on to all of Europe at a handsome markup.</p>
+<p><b>Where the goods were delivered:</b> across the Alpine passes (Brenner, Septimer) to <mark>Augsburg, Nuremberg, Vienna and Prague</mark> – German merchants, later including the Fuggers, were required to live and trade in the <mark>Fondaco dei Tedeschi</mark>, their counting house and warehouse right beside the Rialto Bridge. State galley convoys (mude) sailed on fixed schedules to <mark>Bruges, Antwerp, London and Southampton</mark> (the "Flanders galleys"), to Aigues-Mortes, Tunis, Beirut and Alexandria. Venice was Europe's logistics network – centuries before containers and hubs.</p>
+<p class="quelle">Sources: <a href="https://en.wikipedia.org/wiki/Fondaco_dei_Tedeschi" target="_blank" rel="noopener">Wikipedia – Fondaco dei Tedeschi</a>, <a href="https://en.wikipedia.org/wiki/Economic_history_of_Venice" target="_blank" rel="noopener">Economic history of Venice</a></p>
+</div>
+</details>
+
+<!-- Era 6 -->
+<details class="era" data-cat="herrschaft handel">
+<summary><span class="jahr">1500–1571</span><span class="era-titel">Zenith and turning point</span><span class="ew">1570: c. 175,000</span>
+<span class="era-badges"><span class="badge b-herrschaft">Power</span><span class="badge b-handel">Trade</span></span></summary>
+<div class="era-inhalt">
+<p>Around 1500 Venice seemed to stand at its peak: mainland possessions stretching almost to Milan, colonies as far as Cyprus, Titian and Bellini painting, Aldus Manutius printing – at times a third of all Europe's books came from Venetian presses. Yet in that same decade the die was cast against Venice without a single shot fired at the city: <mark>in 1498 Vasco da Gama reached India by sea</mark> around Africa. The spice trade began to bypass the lagoon via Lisbon and later Amsterdam – the Rialto monopoly started to crumble.</p>
+<p>In 1571 Venice, with the Holy League, won a glorious victory over the Ottoman fleet at <mark>Lepanto</mark> – yet lost Cyprus in the very same war. The victory was celebrated; the strategic position nonetheless worsened step by step: the Mediterranean was no longer the centre of the world.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Battle_of_Lepanto" target="_blank" rel="noopener">Wikipedia – Battle of Lepanto</a></p>
+</div>
+</details>
+
+<!-- Era 7 -->
+<details class="era" data-cat="lagune kultur">
+<summary><span class="jahr">1575 / 1630</span><span class="era-titel">The great plague waves</span><span class="ew">−50,000 dead in 1630</span>
+<span class="era-badges"><span class="badge b-lagune">Catastrophe</span><span class="badge b-kultur">Culture</span></span></summary>
+<div class="era-inhalt">
+<p>Twice the plague tore enormous gaps: in 1575–77 around 50,000 people died – a quarter to a third of the city – and in gratitude for its end the church of <mark>Il Redentore</mark> rose on the Giudecca. In 1630/31 a second wave carried off nearly 50,000 more; this time the city vowed <mark>Santa Maria della Salute</mark> at the entrance to the Grand Canal. Both feasts – Redentore in July, Salute on 21 November – are celebrated to this day with pontoon bridges across the canals, and they remain among the few festivals that belong to the Venetians themselves.</p>
+<p>In fighting the epidemics, Venice incidentally invented a piece of world history: <mark>quarantine</mark> (from "quaranta giorni", forty days) on the lazaretto islands of the lagoon – see the Lost Places below.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Santa_Maria_della_Salute" target="_blank" rel="noopener">Wikipedia – Santa Maria della Salute</a></p>
+</div>
+</details>
+
+<!-- Era 8 -->
+<details class="era" data-cat="herrschaft kultur">
+<summary><span class="jahr">17th/18th c.–1797</span><span class="era-titel">Carnival, Casanova – and the end of the Republic</span>
+<span class="era-badges"><span class="badge b-herrschaft">Power</span><span class="badge b-kultur">Culture</span></span></summary>
+<div class="era-inhalt">
+<p>In political and economic decline, Venice became Europe's <mark>pleasure capital</mark> in the 18th century – in a sense the first tourist destination of the modern age. Carnival lasted for months, ridotti (gaming houses) and opera houses flourished, Canaletto painted vedute as souvenirs for English Grand Tour travellers, Casanova and Goldoni shaped the myth. Even then the city lived more from visitors than from trade – a foretaste of things to come.</p>
+<p>On <mark>12 May 1797</mark> the 1,100-year-old Republic ended without a battle: under pressure from Napoleon, the last doge Ludovico Manin abdicated and the Great Council dissolved itself. Napoleon plundered the city (the bronze horses, too, travelled to Paris), closed monasteries and scuole – and in the very same year traded Venice away to Austria in the Treaty of Campo Formio.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Ludovico_Manin" target="_blank" rel="noopener">Wikipedia – Ludovico Manin</a></p>
+</div>
+</details>
+
+<!-- Era 9 -->
+<details class="era" data-cat="herrschaft tourismus">
+<summary><span class="jahr">1797–1866</span><span class="era-titel">Austrian rule and the bridge to the mainland</span>
+<span class="era-badges"><span class="badge b-herrschaft">Power</span><span class="badge b-tourismus">Tourism</span></span></summary>
+<div class="era-inhalt">
+<p>Under Austria, Venice at first grew poor but gained two things that would shape its future: in 1846 the <mark>railway bridge</mark> linked the island city to the mainland for the first time – the end of complete insularity, the beginning of modern travel. And with the railway came the travellers: Byron, Ruskin, later Wagner (who died in the Palazzo Vendramin in 1883) made Venice the yearning destination of Romanticism.</p>
+<p>In 1848/49 the city rose up under Daniele Manin and, as the "Repubblica di San Marco", withstood a months-long siege – in vain. Only in <mark>1866</mark>, after the Austro-Prussian War, did Venice join the young Kingdom of Italy by plebiscite.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Republic_of_San_Marco" target="_blank" rel="noopener">Wikipedia – Republic of San Marco</a></p>
+</div>
+</details>
+
+<!-- Era 10 -->
+<details class="era" data-cat="tourismus kultur handel">
+<summary><span class="jahr">1870–1945</span><span class="era-titel">Belle Époque on the Lido, Biennale, Marghera</span>
+<span class="era-badges"><span class="badge b-tourismus">Tourism</span><span class="badge b-kultur">Culture</span><span class="badge b-handel">Trade</span></span></summary>
+<div class="era-inhalt">
+<p>Three decisions that explain today's Venice: first, from the 1870s the <mark>Lido</mark> became Europe's most fashionable seaside resort – the Grand Hotel des Bains (1900), the Excelsior (1908) and Thomas Mann's "Death in Venice" (1912) built its legend. Second, in <mark>1895 the city founded the Biennale</mark>, the world's oldest art biennial (see the golden section below). Third, from <mark>1917 Porto Marghera</mark> grew on the mainland: industrial port, refineries, chemicals – jobs, but also the start of the great resettlement of Venetians to the mainland towns of Mestre and Marghera.</p>
+<p>The old city survived both world wars almost untouched; in 1933 the road bridge (Ponte della Libertà) joined the railway bridge.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Marghera" target="_blank" rel="noopener">Wikipedia – Marghera</a></p>
+</div>
+</details>
+
+<!-- Era 11 -->
+<details class="era" data-cat="lagune tourismus">
+<summary><span class="jahr">1945–2000</span><span class="era-titel">Acqua alta 1966 and the great exodus</span><span class="ew">175,000 → 66,000</span>
+<span class="era-badges"><span class="badge b-lagune">Lagoon</span><span class="badge b-tourismus">Tourism</span></span></summary>
+<div class="era-inhalt">
+<div class="vignette"><svg viewBox="0 0 130 90"><g fill="none" stroke="#7a6a45" stroke-width="1.6" stroke-linecap="round"><path d="M30 58 L30 22 L62 22 L62 58"/><path d="M38 30 h8 v8 h-8 z M50 30 h6 v8 h-6 z"/><path d="M75 58 L75 30 L100 30 L100 58"/><path d="M6 58 Q 30 50 60 58 T 124 58"/><path d="M6 68 Q 34 60 66 68 T 124 68"/><path d="M6 78 Q 30 72 62 78 T 124 78"/></g></svg></div>
+<p>On <mark>4 November 1966</mark> the water stood 194 cm above normal – the worst flood in the city's history, on the same day as the Arno flood in Florence. The world discovered how vulnerable Venice is; UNESCO and private committees ("Save Venice") began decades of rescue work. The <mark>MOSE</mark> barrier project was planned from the 1980s onward.</p>
+<p>In parallel ran the quieter catastrophe: the <mark>population of the historic centre plunged from around 175,000 (1951) to about 66,000 (2001)</mark>. Flats were damp, expensive and without car access; jobs were in Mestre; and tourism increasingly crowded out ordinary rents. Shops for locals gave way to mask boutiques, schools closed – the city began to empty from within even as it filled up from without.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/Acqua_alta" target="_blank" rel="noopener">Wikipedia – Acqua alta</a></p>
+</div>
+</details>
+
+<!-- Era 12 -->
+<details class="era" data-cat="tourismus lagune">
+<summary><span class="jahr">2000–today</span><span class="era-titel">Overtourism, MOSE and the tipping point</span><span class="ew">today: below 49,000</span>
+<span class="era-badges"><span class="badge b-tourismus">Tourism</span><span class="badge b-lagune">Lagoon</span></span></summary>
+<div class="era-inhalt">
+<p>Around <mark>30 million visitors a year</mark> meet a historic centre with fewer than 49,000 residents – at times more guest beds than resident beds were registered, a symbolic tipping point reached in 2023. The extreme flood of November 2019 (187 cm) accelerated the completion of <mark>MOSE</mark>: since October 2020 the mobile flood gates have genuinely kept the severe acqua alta events out – a success, though bought with high running costs and open questions about the rising sea level.</p>
+<p>In 2021 Italy banned <mark>large cruise ships</mark> from St Mark's Basin and the Giudecca Canal; in 2024 the <mark>entry fee for day visitors</mark> launched as a world first – both covered in detail in the outlook below. UNESCO has repeatedly debated placing Venice on the List of World Heritage in Danger.</p>
+<p class="quelle">Source: <a href="https://en.wikipedia.org/wiki/MOSE" target="_blank" rel="noopener">Wikipedia – MOSE</a></p>
+</div>
+</details>
+
+</div><!-- /zeitleiste -->
+</section>
+
+<!-- ═══════════ ISLANDS ═══════════ -->
+<section class="block" id="inseln">
+<h2 class="bt">The Islands of the Lagoon</h2>
+<p class="bt-sub">An archipelago of more than 100 islands – each with its own role in the great Venetian clockwork.</p>
+<div class="insel-grid">
+
+<div class="insel"><div class="kopfstreifen" style="background:#9e2b25"></div><div class="inh">
+<h3>Venice (historic centre)</h3><div class="rolle">The capital on the water</div>
+<p>118 islets, 435 bridges, a fish-shaped plan around the Grand Canal. Political, religious and touristic centre – and the scene of Europe's most dramatic population decline.</p>
+<div class="zahl">1951: c. 175,000 → today: below 49,000 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#e0a63a"></div><div class="inh">
+<h3>Murano</h3><div class="rolle">The glass island</div>
+<p>Home of the glass furnaces since 1291 – the master glassmakers enjoyed privileges but were forbidden, on pain of death, to leave the lagoon, so the recipes stayed secret. A world brand to this day, even as cheap imports press the genuine workshops.</p>
+<div class="zahl">today: around 4,000–4,500 residents, declining</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:linear-gradient(90deg,#c94f3d,#e0a63a,#2e7d6e,#3d6fa8,#b45f8e)"></div><div class="inh">
+<h3>Burano</h3><div class="rolle">Colours, fishermen, lace</div>
+<p>Legend says the famous coloured houses helped fishermen find their way home in the fog. World fame through needle lace (merletto) and the buranelli biscuits. Today the lagoon's number-one photo motif – and at the same time a textbook case of population decline: the young move away, houses become holiday flats.</p>
+<div class="zahl">post-war era: c. 6,000 → today: around 2,000 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#b8862b"></div><div class="inh">
+<h3>Torcello</h3><div class="rolle">The mother of Venice</div>
+<p>First centre of the lagoon, with a cathedral of 639 and Byzantine mosaics of world rank. Malaria, silting and the pull of Venice depopulated the island almost completely – the most extreme decline in the whole lagoon. Hemingway wrote here at the Locanda Cipriani.</p>
+<div class="zahl">Middle Ages: several thousand → today: c. 10 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#5c8f3f"></div><div class="inh">
+<h3>Mazzorbo</h3><div class="rolle">Burano's quiet neighbour</div>
+<p>Linked to Burano by a wooden bridge. Once gardens and monasteries, today a prime example of transformation: the old families dwindle, replaced by municipal housing, holiday flats and the <b>Venissa</b> estate, which revived the nearly extinct Dorona grape – gentle tourism instead of fishing.</p>
+<div class="zahl">today: around 300 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#3d6fa8"></div><div class="inh">
+<h3>Lido</h3><div class="rolle">The beach of the Belle Époque</div>
+<p>Twelve kilometres of narrow sand between lagoon and Adriatic – with cars and buses, almost a "normal" town. Once Europe's most fashionable seaside resort, today home of the Film Festival – and of many who can no longer afford the old city. Here too, grand hotels of the founding era stand partly empty.</p>
+<div class="zahl">today: c. 16,000–17,000 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#8a4fa8"></div><div class="inh">
+<h3>Giudecca</h3><div class="rolle">From workers' quarter to insider tip</div>
+<p>A long chain of islands facing the old city: Palladio's Redentore church, former shipyards and factories (Molino Stucky, now a Hilton). Long a working-class district, today a mix of genuine everyday life, artists' studios and quiet gentrification.</p>
+<div class="zahl">today: around 4,500 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#2e7d6e"></div><div class="inh">
+<h3>Sant'Erasmo</h3><div class="rolle">The vegetable garden</div>
+<p>Larger than the historic centre itself, yet almost unbuilt: here grow the violet artichokes (castraure) and the vegetables for the Rialto market – agriculture in the middle of the lagoon, as for centuries.</p>
+<div class="zahl">today: around 650–700 residents</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>San Michele</h3><div class="rolle">The cemetery island</div>
+<p>Venice's cemetery since Napoleonic times, ringed by cypresses. Here rest Stravinsky, Diaghilev, Ezra Pound and Joseph Brodsky. At All Saints a pontoon bridge traditionally leads across.</p>
+<div class="zahl">residents: silence</div>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#d97941"></div><div class="inh">
+<h3>Pellestrina &amp; Chioggia</h3><div class="rolle">The southern rim of the lagoon</div>
+<p>Pellestrina: eleven kilometres of fishing villages behind the mighty 18th-century Murazzi stone dikes. Chioggia at the southern end: "Little Venice" with a real fishing port – one of Italy's largest – and far more everyday life than its big sister.</p>
+<div class="zahl">Pellestrina: c. 3,500 · Chioggia: c. 48,000 residents</div>
+</div></div>
+
+</div>
+</section>
+
+<!-- ═══════════ LA BELLA LAGUNA ═══════════ -->
+<section class="block" id="bella">
+<h2 class="bt">La Bella Laguna – why this city enchants</h2>
+<p class="bt-sub">For all the figures and worries: Venice is and remains the most beautiful total work of art ever built by humans on water.</p>
+<div class="insel-grid">
+
+<div class="insel"><div class="kopfstreifen" style="background:#b8862b"></div><div class="inh">
+<h3>Architecture beyond compare</h3><div class="rolle">An open-air museum of 1,000 years</div>
+<p>Nowhere else do Byzantine gold mosaics (St Mark's), Venetian Gothic (Doge's Palace, Ca' d'Oro), Renaissance (Palladio's San Giorgio Maggiore) and Baroque (the Salute) stand so close together – all mirrored in the water. Every façade on the Grand Canal tells a merchant's story, every campo is a stage. On Burano the colours glow, on Murano the glass, and on the Lido the Art Nouveau villas of the Belle Époque dream on.</p>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#8a4fa8"></div><div class="inh">
+<h3>Music &amp; theatre</h3><div class="rolle">The city of Vivaldi</div>
+<p>The <b>Teatro La Fenice</b> – the "phoenix" that rose more splendid from every fire – ranks among the most beautiful opera houses in the world; its New Year's concert is broadcast around the globe. Add Vivaldi concerts in Baroque churches, the Teatro Goldoni, chamber music in palazzi and open-air stages on the campi in summer: Venice makes music every evening of the year.</p>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#c94f3d"></div><div class="inh">
+<h3>Food &amp; bacari</h3><div class="rolle">From cicchetto to Michelin star</div>
+<p>Venetian cooking is lagoon cooking: sarde in saor, moleche (soft-shell crabs), risotto al nero di seppia, artichokes from Sant'Erasmo. Best enjoyed in the <b>bacari</b> – tiny wine bars with cicchetti morsels and an "ombra" of wine at the counter. Add fish trattorias on Burano (the risotto di gò is legendary), the Michelin-starred <b>Venissa</b> in its walled vineyard on Mazzorbo, and the morning Rialto fish market as theatre for all the senses.</p>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#12606d"></div><div class="inh">
+<h3>Out on the canals</h3><div class="rolle">The world's most beautiful canal cruise</div>
+<p>The <b>gondola</b> is more than a cliché: eleven metres of craftsmanship, asymmetrically built, made for centuries in the same squeri (boatyards). Prefer it simpler? <b>Vaporetto line 1</b> down the whole Grand Canal is Europe's cheapest palace tour, and the traghetti (gondola ferries) still cross the canal for small change, as they always have. In the evening, when the day visitors have gone, the small canals belong to the lapping water again.</p>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#2e7d6e"></div><div class="inh">
+<h3>Active in the lagoon</h3><div class="rolle">Kayak, rowing, sailing</div>
+<p>The lagoon is a 550 km² natural paradise: by <b>kayak or SUP</b> through quiet side canals and out to the barene (salt marshes) full of herons and flamingos; learn <b>voga alla veneta</b> – Venetian stand-up rowing – at one of the many rowing clubs; sail a flat-bottomed bragozzo out to the oyster beds. The highlight is the <b>Vogalonga</b> in spring: thousands of rowing boats, zero engines, the whole lagoon one festival.</p>
+</div></div>
+
+<div class="insel"><div class="kopfstreifen" style="background:#3d6fa8"></div><div class="inh">
+<h3>Lido, beach &amp; cycling</h3><div class="rolle">Sea and leisure</div>
+<p>Twelve kilometres of fine sandy beach with the famous capanne (beach huts), gently shelving and family-friendly – and behind it an island made for the <b>bicycle</b>: from the Art Nouveau villas via Malamocco (the oldest village of the lagoon) down to Pellestrina along the Murazzi dikes, towards the fishing boats. In September the red carpet of the Film Festival turns the Lido into Cannes' more beautiful sister.</p>
+</div></div>
+
+</div>
+</section>
+
+<!-- ═══════════ TODAY ═══════════ -->
+<section class="block" id="gegenwart">
+<h2 class="bt">The Situation Today: a Lagoon Losing Its People</h2>
+<p class="bt-sub">The numbers behind the postcard.</p>
+<details class="era" data-cat="tourismus" open>
+<summary><span class="jahr">2026</span><span class="era-titel">Population decline and tourist tides</span>
+<span class="era-badges"><span class="badge b-tourismus">Tourism</span></span></summary>
+<div class="era-inhalt">
+<p><b>Venice historic centre:</b> below 49,000 residents – less than a third of the 1951 figure. Statistically, more than 600 visitors a year for every resident. Housing drifts into short-term rental; those who stay are older than average. A counter display in a pharmacy on Campo San Bartolomeo has publicly documented the decline for years.</p>
+<p><b>Burano:</b> shrunk from around <mark>6,000 to about 2,000</mark> residents. By day the crowds push through the coloured lanes; by evening the vaporetti carry the island empty again. The master lacemakers are dying out; young Buranelli find neither affordable houses nor work beyond tourism.</p>
+<p><b>Torcello:</b> the extreme case – from a medieval town to <mark>around ten permanent residents</mark>, in effect an inhabited open-air museum with a cathedral, two restaurants and plenty of reeds.</p>
+<p><b>Mazzorbo:</b> transformation rather than decline – the old fishing and gardening families give way to social housing, second homes and the gentle wine tourism around Venissa.</p>
+<p><b>Lido:</b> change from grand seaside resort to residential and commuter island; the Film Festival brings back the glamour every September, yet icons like the Hôtel des Bains have waited years for revival.</p>
+<p><b>Mestre/Marghera</b> on the mainland, by contrast, count around 180,000 inhabitants – that is where the "real" Venice of today lives, commuting across the bridge to jobs in hotels, bars and museums.</p>
+<p>And yet: those who stay in the evening, when the day visitors have gone, experience a city that can be very much alive – children on the campi, rowers on the canals, crowded bacari. It is precisely these Venetians and their new allies who drive the change described in the outlook below.</p>
+</div>
+</details>
+</section>
+
+<!-- ═══════════ LOST PLACES ═══════════ -->
+<section class="block" id="lostplaces">
+<h2 class="bt">Lost Places of the Lagoon</h2>
+<p class="bt-sub">Dozens of islands lie abandoned – monastery, lazaretto, fortress, asylum. The most striking:</p>
+<div class="insel-grid">
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Poveglia</h3><div class="rolle">The forbidden island</div>
+<p>An 18th-century plague lazaretto, later a psychiatric hospital until 1968 – abandoned ever since and officially off limits. Crumbling wards, the striking bell tower, rampant vines. Known worldwide as "Italy's creepiest island"; plans for sale and reuse have failed repeatedly, while a citizens' initiative ("Poveglia per tutti") campaigns for public use.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Lazzaretto Vecchio</h3><div class="rolle">Cradle of quarantine</div>
+<p>Here in 1423 Venice established the <b>world's first permanent plague hospital</b> – the very word "lazaretto" comes from this island. Excavations found mass graves with more than 1,500 plague victims. Long left to decay, the island is gradually being developed as a museum and archaeology site.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Lazzaretto Nuovo</h3><div class="rolle">The quarantine harbour</div>
+<p>From 1468 arriving ships and goods had to wait here for 40 days – quarantine as a Venetian invention of public health. The huge Tezon Grande warehouse with its merchants' graffiti survives; volunteers have saved the island, which can be visited in season.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>San Giorgio in Alga</h3><div class="rolle">Monastery in the reeds</div>
+<p>Once an important monastery (a future pope was prior here), then prison, powder magazine and a wartime base – today ruins, a lonely tower and birdsong between Venice and Fusina.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Madonna del Monte &amp; co.</h3><div class="rolle">The crumbling islets</div>
+<p>Between Murano and Burano the remains of a monastery and powder magazine crumble into the water – standing for a dozen increasingly nameless islets (San Secondo, Sant'Angelo delle Polveri, old Austrian gun batteries) that the lagoon is slowly taking back.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Sant'Ariano</h3><div class="rolle">The bone island</div>
+<p>From 1565 the Republic's ossuary: when the cemeteries were full, the bones were brought here. Behind the enclosure wall lies, quite literally, a hill of bones beneath the brambles – the quietest and most uncanny place in the lagoon, close to Torcello.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#55606a"></div><div class="inh">
+<h3>Ospedale al Mare (Lido)</h3><div class="rolle">The beach hospital</div>
+<p>A vast 1920s seaside sanatorium right on the Lido beach, with its own theatre (Teatro Marinoni). After closure it was for decades perhaps Europe's largest coastal lost place; renovation and conversion into housing and hotels are now under way – decay is getting a second life here.</p>
+</div></div>
+
+<div class="insel lost"><div class="kopfstreifen" style="background:#2e7d6e"></div><div class="inh">
+<h3>Counter-example: Sacca Sessola</h3><div class="rolle">From lung sanatorium to luxury hotel</div>
+<p>The "Isola delle Rose" shows it can be done differently: the abandoned sanatorium became a five-star resort – model and warning at once, for the island is thereby no longer publicly accessible either.</p>
+</div></div>
+
+</div>
+</section>
+
+<!-- ═══════════ BIENNALE ═══════════ -->
+<section class="block" id="biennale">
+<div class="biennale">
+<h2><span class="goldloewe">🦁</span> The Biennale – Venice's Window on the World</h2>
+<p style="margin-top:10px">Founded in <mark>1895</mark> as the "International Art Exhibition of the City of Venice", the Biennale is the <b>oldest and most important art exhibition in the world</b>. The Giardini hold the historic national pavilions (the German one since 1909); the Arsenale – the Republic's former state shipyard – hosts the curated main exhibition. The Art and Architecture Biennales alternate year by year; alongside them run the annual festivals of film (on the Lido, since 1932 the world's oldest film festival), music, theatre and dance. The <b>Golden Lion</b> is one of the most coveted awards in the worlds of art and film. For the city, the Biennale is the economic and cultural counter-model to day tourism: it brings visitors who stay, return – and extend the season deep into November.</p>
+
+<div class="termin-grid">
+<div class="termin haupt">
+  <div class="tt">Main event 2026</div>
+  <div class="td">9 May – 22 November 2026</div>
+  <p><b>61st Art Biennale "In Minor Keys"</b> – conceived by Koyo Kouoh (†&nbsp;May 2025) and realised by her team in her spirit; around 110 participants in the Giardini, the Arsenale and more than 50 venues across the city. Preview: 6–8 May.</p>
+</div>
+<div class="termin">
+  <div class="tt">Film Festival 2026 (Lido)</div>
+  <div class="td">2 – 12 September 2026</div>
+  <p>83rd Mostra del Cinema on the Lido – red carpet outside the Palazzo del Cinema.</p>
+</div>
+<div class="termin">
+  <div class="tt">Theatre / Dance / Music 2026</div>
+  <div class="td">June – October 2026</div>
+  <p>Theatre 7–21 June · Dance 17 July–1 August · Music 10–24 October.</p>
+</div>
+<div class="termin">
+  <div class="tt">Looking ahead to 2027</div>
+  <div class="td">expected May – November 2027</div>
+  <p><b>Architecture Biennale</b> – in the familiar alternation, 2027 again brings the world's most important architecture exhibition.</p>
+</div>
+</div>
+<p class="quelle" style="margin-top:4px">Sources: <a href="https://www.labiennale.org" target="_blank" rel="noopener">labiennale.org</a>, <a href="https://universes.art/en/venice-biennale/2026" target="_blank" rel="noopener">universes.art</a></p>
+</div>
+</section>
+
+<!-- ═══════════ FUTURE ═══════════ -->
+<section class="block" id="zukunft">
+<h2 class="bt">Outlook: the Future Will Be Beautiful</h2>
+<p class="bt-sub">Change must come – and it has long since begun. Venice is reinventing itself: as the first city in the world to dose its success wisely instead of choking on it.</p>
+<ul class="zukunft-liste">
+<li data-icon="🚢"><b>A clear view of the Doge's Palace.</b> Since August 2021, ships above 25,000 GT may no longer pass through St Mark's Basin and the Giudecca Canal – the ocean giants in front of San Marco belong to the past. The result can be seen and heard: calmer water, cleaner air, a panorama like a Canaletto painting. In the long term a cruise port outside the lagoon is planned.</li>
+<li data-icon="🎟"><b>An entry fee that benefits the city.</b> Launched in 2024 as a world first, the "contributo di accesso" for day visitors is now permanent: in 2026 it applies on <mark>60 days between 3 April and 26 July</mark> (weekends and public holidays, 8:30 am–4 pm) – <mark>€5 with advance booking, €10 for latecomers</mark>; overnight guests are exempt. The revenue flows into canal maintenance and urban upkeep. The new mayor wants to raise the fee to €30–50, and extending it to the lagoon islands (Murano, Burano, Torcello) is under discussion – the direction is right: those who come contribute to preservation, and those who stay overnight are rewarded.</li>
+<li data-icon="🌤"><b>The off-season becomes the finest season.</b> July and August in the lagoon are growing oppressively hot – and that is exactly what redistributes the flows: April and May with blossoming gardens and the Vogalonga, golden October with its soft lagoon light, November with the Salute feast and the Biennale finale, Carnival in winter. Venice shows its best side in the "bella stagione" – emptier, milder, more genuine. For hosts this means: the season grows longer rather than more hectic.</li>
+<li data-icon="🌊"><b>MOSE works.</b> Since October 2020 the mobile flood gates have reliably kept the severe acqua alta events out – St Mark's Square stays dry where the duckboards used to stand. For the rising sea level, thinking is already moving on: from additional coastal defences to raising the lowest-lying quarters. Venice has lived with the water for 1,600 years – it is currently learning the next chapter.</li>
+<li data-icon="🏠"><b>The city fights for its residents – and finds allies.</b> Limits on new holiday flats, smaller visitor groups (max. 25 people, loudspeakers banned), subsidised housing on Mazzorbo and the Giudecca, young craftsmen in old squeri, new university sites: everywhere initiatives are emerging that carry Venice into the future as a <b>living, inhabited city</b>. Burano and the small islands are the early-warning system – and at the same time the laboratory where gentle tourism (Venissa on Mazzorbo leads the way) and genuine island life come together.</li>
+</ul>
+<p style="margin-top:18px;font-style:italic;color:var(--lagune);font-size:1.05rem">Venice has survived Attila, the plague, Napoleon and the flood of 1966 – it will steer mass tourism into good channels too. The lagoon remains what it has always been: the most beautiful proof that people can live with the water. <b>The future will be beautiful.</b></p>
+</section>
+
+<!-- ═══════════ SOURCES ═══════════ -->
+<section class="block" id="quellen">
+<h2 class="bt">Sources &amp; Further Reading</h2>
+<ol class="quellenverz">
+<li><a href="https://en.wikipedia.org/wiki/History_of_Venice" target="_blank" rel="noopener">Wikipedia: History of Venice</a> – overview from antiquity to today</li>
+<li><a href="https://en.wikipedia.org/wiki/Republic_of_Venice" target="_blank" rel="noopener">Wikipedia: Republic of Venice</a> – constitution, doges, trading system</li>
+<li><a href="https://en.wikipedia.org/wiki/Fondaco_dei_Tedeschi" target="_blank" rel="noopener">Wikipedia: Fondaco dei Tedeschi</a> – the German merchants' house at the Rialto</li>
+<li><a href="https://en.wikipedia.org/wiki/Torcello" target="_blank" rel="noopener">Wikipedia: Torcello</a> · <a href="https://en.wikipedia.org/wiki/Burano" target="_blank" rel="noopener">Burano</a> · <a href="https://en.wikipedia.org/wiki/Poveglia" target="_blank" rel="noopener">Poveglia</a> · <a href="https://en.wikipedia.org/wiki/MOSE" target="_blank" rel="noopener">MOSE</a></li>
+<li><a href="https://www.labiennale.org" target="_blank" rel="noopener">La Biennale di Venezia</a> – official dates and programmes</li>
+<li><a href="https://cda.ve.it/en" target="_blank" rel="noopener">cda.ve.it</a> – official City of Venice portal for the access fee</li>
+<li>Current reporting on the entry fee and cruise ban: ADAC, ÖAMTC, WKO (as of 2026)</li>
+</ol>
+</section>
+
+</main>
+</div><!-- /filter-anker -->
+
+<footer>
+<div class="burano-streifen" style="margin:-26px -16px 20px" aria-hidden="true">
+<span class="bs1"></span><span class="bs2"></span><span class="bs3"></span><span class="bs4"></span>
+<span class="bs5"></span><span class="bs6"></span><span class="bs7"></span><span class="bs8"></span>
+</div>
+<p class="fs">"Venice was not built on the water – it was conceived out of the water."</p>
+<p style="margin-top:8px">Venice Chronicle · compiled 2026 · sister work to the Mönchgut and Hamburg Chronicles</p>
+</footer>
+
+</body>
+</html>
