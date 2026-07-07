@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mönchgut-Chronik · Von Christi Geburt bis heute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bodden:#14424E;      /* tiefes Boddenblau */
+  --kreide:#FBFAF6;      /* Kreideweiß */
+  --schilf:#5C4A2E;      /* Reet/Schilfbraun */
+  --bernstein:#C98A2B;   /* Bernstein-Akzent */
+  --moos:#3E6B4F;        /* Salzwiesengrün */
+  --sturm:#8A3B2E;       /* Sturmrot */
+  --line:#D8D2C4;
+  --ink:#1E2A2E;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Source Sans 3',sans-serif;background:var(--kreide);color:var(--ink);line-height:1.6}
+header{background:var(--bodden);color:var(--kreide);padding:56px 20px 44px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;
+  background:repeating-linear-gradient(-45deg,var(--bernstein) 0 10px,transparent 10px 20px);opacity:.85}
+.wrap{max-width:880px;margin:0 auto}
+.eyebrow{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--bernstein);font-weight:700}
+h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(34px,6vw,58px);line-height:1.05;margin:10px 0 14px}
+header p{max-width:620px;opacity:.9}
+/* Filter */
+.filters{position:sticky;top:0;z-index:20;background:var(--kreide);border-bottom:1px solid var(--line);padding:12px 20px}
+.filters .wrap{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-block;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600;cursor:pointer;transition:.15s;color:var(--ink);user-select:none}
+.chip:hover{border-color:var(--bodden)}
+/* Timeline */
+main{padding:40px 20px 80px}
+.timeline{position:relative}
+.timeline::before{content:"";position:absolute;left:14px;top:0;bottom:0;width:3px;
+  background:repeating-linear-gradient(to bottom,var(--bodden) 0 26px,var(--bernstein) 26px 34px)}
+.era{position:relative;padding-left:52px;margin-bottom:18px}
+.dot{position:absolute;left:4px;top:22px;width:23px;height:23px;border-radius:50%;background:var(--kreide);border:4px solid var(--bodden)}
+.era[data-cat~="klima"] .dot{border-color:var(--sturm)}
+.era[data-cat~="tourismus"] .dot{border-color:var(--bernstein)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(20,66,78,.06)}
+details.card>summary{list-style:none}
+details.card>summary::-webkit-details-marker{display:none}
+.head{width:100%;text-align:left;cursor:pointer;padding:18px 20px 14px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;font-family:inherit}
+.head:hover{background:#F4F1E8}
+.year{font-family:'Fraunces',serif;font-weight:900;font-size:20px;color:var(--bodden);white-space:nowrap;min-width:118px}
+.title{font-weight:700;font-size:17px;flex:1}
+.arrow{font-size:18px;color:var(--bernstein);transition:transform .25s;display:inline-block}
+details[open] .arrow{transform:rotate(90deg)}
+.tagrow{display:flex;gap:6px;flex-wrap:wrap;width:100%;padding-top:8px}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:4px;color:#fff}
+.tag.klima{background:var(--sturm)}.tag.krieg{background:var(--schilf)}.tag.herrschaft{background:var(--bodden)}
+.tag.tourismus{background:var(--bernstein)}.tag.handel{background:var(--moos)}
+.body-inner{padding:4px 20px 18px;border-top:1px dashed var(--line)}
+.tag.szenario-tag{background:#fff;color:var(--sturm);border:1.5px dashed var(--sturm)}
+details.szenario{border-style:dashed;border-color:var(--bernstein)}
+/* CSS-Filter ohne JavaScript */
+.fradio{position:absolute;opacity:0;pointer-events:none}
+#f-alle:checked~.filters label[for="f-alle"],
+#f-herrschaft:checked~.filters label[for="f-herrschaft"]{background:var(--bodden);color:#fff;border-color:transparent}
+#f-klima:checked~.filters label[for="f-klima"]{background:var(--sturm);color:#fff;border-color:transparent}
+#f-krieg:checked~.filters label[for="f-krieg"]{background:var(--schilf);color:#fff;border-color:transparent}
+#f-tourismus:checked~.filters label[for="f-tourismus"]{background:var(--bernstein);color:#fff;border-color:transparent}
+#f-handel:checked~.filters label[for="f-handel"]{background:var(--moos);color:#fff;border-color:transparent}
+#f-klima:checked~main .era:not([data-cat~="klima"]),
+#f-krieg:checked~main .era:not([data-cat~="krieg"]),
+#f-herrschaft:checked~main .era:not([data-cat~="herrschaft"]),
+#f-tourismus:checked~main .era:not([data-cat~="tourismus"]),
+#f-handel:checked~main .era:not([data-cat~="handel"]){display:none}
+.body-inner p{margin:12px 0;font-size:15.5px}
+.src{margin-top:12px;padding:10px 14px;background:#F4F1E8;border-radius:8px;font-size:13px}
+.src b{color:var(--schilf)}
+.src a{color:var(--bodden);font-weight:600;text-decoration:none;border-bottom:1px solid var(--bernstein)}
+.src a:hover{color:var(--bernstein)}
+
+.vignette{margin:14px 0 4px;padding:10px 12px 6px;background:#F7F4EC;border:1px solid var(--line);border-radius:10px}
+.vignette svg{width:100%;height:auto;display:block;max-height:110px}
+.vignette figcaption{font-size:12px;color:#8A8375;text-align:center;padding:4px 0 2px;font-style:italic}
+/* Quellen-Fußteil */
+.quellen{max-width:880px;margin:30px auto 0;padding:24px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.quellen h2{font-family:'Fraunces',serif;font-size:24px;color:var(--bodden);margin-bottom:12px}
+.quellen ol{padding-left:22px;font-size:14px}
+.quellen li{margin:6px 0}
+.quellen a{color:var(--bodden);font-weight:600}
+footer{text-align:center;font-size:13px;color:#7A756A;padding:26px}
+@media(max-width:560px){.year{min-width:auto;font-size:17px}.head{flex-wrap:wrap;gap:6px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Halbinsel Mönchgut · Insel Rügen</div>
+    <h1>Zweitausend Jahre zwischen Bodden und Ostsee</h1>
+    <p>Eine anklickbare Chronik von Christi Geburt bis heute: Klima, Kriege, Herrschaft, Handel und der Weg zum Tourismus. Jede Epoche lässt sich aufklappen – mit Quellenangabe.</p>
+  </div>
+</header>
+
+<input type="radio" name="filter" id="f-alle" class="fradio" checked>
+<input type="radio" name="filter" id="f-klima" class="fradio">
+<input type="radio" name="filter" id="f-krieg" class="fradio">
+<input type="radio" name="filter" id="f-herrschaft" class="fradio">
+<input type="radio" name="filter" id="f-tourismus" class="fradio">
+<input type="radio" name="filter" id="f-handel" class="fradio">
+
+<nav class="filters">
+  <div class="wrap">
+    <label class="chip" for="f-alle">Alle</label>
+    <label class="chip" for="f-klima">🌊 Klima &amp; Naturereignisse</label>
+    <label class="chip" for="f-krieg">⚔️ Kriege</label>
+    <label class="chip" for="f-herrschaft">👑 Herrschaft &amp; Geschichte</label>
+    <label class="chip" for="f-tourismus">🏖️ Tourismus</label>
+    <label class="chip" for="f-handel">⚓ Handel &amp; Wirtschaft</label>
+  </div>
+</nav>
+
+<main>
+<div class="wrap timeline" id="tl">
+
+<!-- 1 -->
+<section class="era" data-cat="herrschaft klima handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">um 0–600</span><span class="title">Germanen, Völkerwanderung und ein warmes Klima</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span><span class="tag klima">Klima</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Hünengrab und Findling Buskam"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 80 H330" stroke="#14424E" stroke-width="2"/><path d="M60 80 l14 -26 h44 l14 26 z" fill="none" stroke="#5C4A2E" stroke-width="3"/><rect x="72" y="60" width="14" height="20" fill="none" stroke="#5C4A2E" stroke-width="3"/><rect x="102" y="60" width="14" height="20" fill="none" stroke="#5C4A2E" stroke-width="3"/><ellipse cx="250" cy="70" rx="42" ry="22" fill="none" stroke="#14424E" stroke-width="3"/><path d="M225 66 q25 -14 50 0" stroke="#14424E" stroke-width="2" fill="none"/><path d="M190 88 q20 8 40 0 t40 0 t40 0" stroke="#C98A2B" stroke-width="2.5" fill="none"/><circle cx="300" cy="24" r="12" fill="none" stroke="#C98A2B" stroke-width="2.5"/></svg><figcaption>Zeichnung: Hünengrab und Findling Buskam</figcaption></figure>
+      <p>Um Christi Geburt ist der Südosten Rügens längst uralte Kulturlandschaft: Die frühesten Siedlungsspuren auf Mönchgut reichen bis in die mittlere Steinzeit um 8000 v. Chr. zurück; das jungsteinzeitliche „Herzogsgrab" in der Baaber Heide und bronzezeitliche Hügelgräber wie der Speckbusch bei Göhren zeugen davon. Vor der Küste liegt der Buskam, mit rund 540 Tonnen einer der größten Findlinge Norddeutschlands – ein Mitbringsel der letzten Eiszeit.</p>
+      <p>In der römischen Kaiserzeit siedelt auf Rügen der germanische Stamm der Rugier, dem die Insel wohl ihren Namen verdankt. Das milde Klima der „Römischen Warmzeit" begünstigt Ackerbau und Ostseehandel; Bernstein von den Küsten gelangt über Handelswege bis ins Römische Reich. Mit der Klimaverschlechterung der Völkerwanderungszeit (ca. 400–600) – kühlere, feuchtere Jahrhunderte, die in ganz Europa Wanderungsbewegungen auslösen – ziehen die Rugier ab, und die Insel leert sich weitgehend, bis neue Siedler von Osten kommen.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Von der Steinzeit bis in die Moderne</a> · <a href="https://de.wikipedia.org/wiki/M%C3%B6nchgut" target="_blank">Wikipedia: Mönchgut</a> · <a href="https://de.wikipedia.org/wiki/R%C3%BCgen" target="_blank">Wikipedia: Rügen</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 2 -->
+<section class="era" data-cat="herrschaft krieg">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">600–1168</span><span class="title">Die slawischen Ranen und der Fall von Arkona</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span><span class="tag krieg">Krieg</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Svantovit-Heiligtum am Kap Arkona und dänisches Langschiff"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 30 L90 30 L120 85 H10 Z" fill="none" stroke="#14424E" stroke-width="3"/><path d="M35 30 v-14 h26 v14 M30 16 h36" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M48 16 v-10 l10 5 z" fill="#8A3B2E" stroke="#8A3B2E"/><path d="M140 88 q25 -10 50 0 t50 0 t50 0 t40 0" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M200 78 q40 14 84 0 l-8 -8 h-68 z" fill="none" stroke="#5C4A2E" stroke-width="3"/><path d="M206 70 q-10 -16 4 -26" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M240 70 v-34 l30 22 h-30" fill="none" stroke="#C98A2B" stroke-width="2.5"/></svg><figcaption>Zeichnung: Svantovit-Heiligtum am Kap Arkona und dänisches Langschiff</figcaption></figure>
+      <p>Ab dem 7. Jahrhundert besiedeln slawische Stämme Rügen. Die Ranen errichten mit dem Svantovit-Heiligtum am Kap Arkona eines der bedeutendsten religiösen Zentren der westslawischen Welt und beherrschen zeitweise Teile der südlichen Ostsee. Auch Mönchgut wird slawisch besiedelt und landwirtschaftlich erschlossen – fast alle Ortsnamen der Halbinsel (Gager, Thiessow, Zicker, Baabe, Lobbe) sind slawischen Ursprungs.</p>
+      <p>Göhren tritt erstmals beim dänischen Chronisten Saxo Grammaticus in die schriftliche Geschichte ein: Eine dänische Kriegerschar landet an der Küste und legt Brände bis zum „gorum promontorum", dem Vorgebirge von Göhren. 1168 erobern die Dänen unter König Waldemar I. Arkona, zerstören das Heiligtum und christianisieren die Insel. Rügen wird dänisches Lehnsfürstentum unter slawischen Fürsten.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a> · <a href="https://geschichte.ruegens.de/lobbe-ein-kleiner-ort-auf-monchgut-mit-700jahriger-geschichte/" target="_blank">geschichte.ruegens.de: Lobbe</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 3 -->
+<section class="era" data-cat="herrschaft handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1252–1360</span><span class="title">Das Kloster Eldena – Mönchgut bekommt seinen Namen</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Zisterziensermönch, Kloster Eldena und Kornschiff auf dem Bodden"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M40 84 v-36 l16 -14 16 14 v36 z" fill="none" stroke="#14424E" stroke-width="3"/><path d="M52 84 v-16 h8 v16" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M56 26 v-10 M50 22 h12" stroke="#C98A2B" stroke-width="2.5"/><circle cx="140" cy="48" r="9" fill="none" stroke="#5C4A2E" stroke-width="3"/><path d="M140 57 q-14 4 -14 27 h28 q0 -23 -14 -27 M126 66 q14 -6 28 0" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M200 84 h120 M200 84 q10 -12 24 0 q10 -12 24 0" stroke="#3E6B4F" stroke-width="2.5" fill="none"/><path d="M240 60 h60 l-10 14 h-40 z M270 60 v-18 M258 48 l12 -10 12 10" stroke="#14424E" stroke-width="2.5" fill="none"/></svg><figcaption>Zeichnung: Zisterziensermönch, Kloster Eldena und Kornschiff auf dem Bodden</figcaption></figure>
+      <p>Die namensgebende Epoche: 1252 übergibt Fürst Jaromar II. von Rügen das „Land Reddevitz" – den größeren Teil der Halbinsel – dem Zisterzienserkloster Eldena bei Greifswald. 1276 wird Lobbe erstmals als „terminus Lobbe" erwähnt, 1295 erwirbt das Kloster weitere Dörfer. 1360 kauft Abt Martin schließlich für nur 3.180 Mark den südlichen Rest von der Familie Bonow. Seitdem heißt die Halbinsel „Mönchegud" – das Gut der Mönche.</p>
+      <p>Das Umfeld ist die Blütezeit der Hanse: Stralsund und Greifswald steigen zu bedeutenden Handelsstädten auf, und die Schifffahrtswege in den Greifswalder Bodden führen direkt an Mönchgut vorbei – eine Lage, die der Halbinsel später ihr Lotsenwesen bescheren wird.</p>
+      <p>Die Zisterzienser trennen ihren Besitz durch den Mönchgraben nördlich von Baabe symbolisch vom Rest Rügens ab. So entsteht ein abgeschottetes Gebiet mit eigener Volkskultur, eigenen Trachten und sogar eigenem Dialekt. Die Mönche bewirtschaften das Land intensiv; die Erträge werden über den Greifswalder Bodden zum Kloster verschifft – Mönchguts erster geregelter „Exporthandel". Die um 1350 erbaute Dorfkirche Groß Zicker gilt als ältestes Gebäude der Halbinsel. Die Mittelalterliche Warmzeit begünstigt in dieser Phase den Landesausbau in ganz Nordeuropa.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://de.wikipedia.org/wiki/M%C3%B6nchgut" target="_blank">Wikipedia: Mönchgut</a> · <a href="https://geschichte.ruegens.de/lobbe-ein-kleiner-ort-auf-monchgut-mit-700jahriger-geschichte/" target="_blank">geschichte.ruegens.de: Lobbe</a> · <a href="https://www.paradies-ruegen.de/ruegen-entdecken/ruegens-regionen/sued-ruegen/" target="_blank">paradies-ruegen.de: Mönchgut</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 4 -->
+<section class="era" data-cat="klima handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1304</span><span class="title">Die Allerheiligenflut reißt Land von Mönchgut</span><span class="arrow">›</span><span class="tagrow"><span class="tag klima">Klima</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Sturmflutwelle 1304 reißt Land fort, das Neue Tief entsteht"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 86 h60 l14 -18 14 18 h30" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M120 86 q30 -50 70 -34 q30 12 20 34" stroke="#8A3B2E" stroke-width="4" fill="none"/><path d="M170 40 q14 -14 30 -6" stroke="#8A3B2E" stroke-width="3" fill="none"/><path d="M215 86 q25 -10 50 0 t60 0" stroke="#14424E" stroke-width="3" fill="none"/><path d="M250 70 l40 0" stroke="#C98A2B" stroke-width="2.5" stroke-dasharray="6 5"/><text x="252" y="62" font-size="11" fill="#C98A2B" font-family="sans-serif">Neues Tief</text></svg><figcaption>Zeichnung: Sturmflutwelle 1304 reißt Land fort, das Neue Tief entsteht</figcaption></figure>
+      <p>Am 1. November 1304 trifft die Allerheiligenflut die vorpommersche Küste mit voller Wucht. Teile Mönchguts werden weggerissen; der Überlieferung nach sollen im Süden ganze Kirchspiele verschlungen worden sein. Dabei entsteht das „Neue Tief" zwischen der Südspitze Rügens und der Insel Ruden – eine Rinne, die Stralsund fortan eine direkte Verbindung zum offenen Meer an Mönchgut vorbei ermöglicht.</p>
+      <p>Eine Naturkatastrophe verändert damit die Handelsgeographie der Region: Die neue Fahrrinne wird für die aufstrebende Hansestadt Stralsund zum wirtschaftlichen Gewinn, während Mönchgut Land verliert. Der Sage nach war die Flut die Strafe dafür, dass ein Weib Brot als Steg in den Wasserlauf geworfen hatte – ein Echo der Angst, mit der die Küstenbewohner der See begegneten.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://de.wikipedia.org/wiki/Ostseesturmhochwasser" target="_blank">Wikipedia: Ostseesturmhochwasser</a> · <a href="https://das-blaettchen.de/2018/09/sturmflut-auf-ruegen-45600.html" target="_blank">Das Blättchen: Sturmflut auf Rügen</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 5 -->
+<section class="era" data-cat="herrschaft">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1534–1611</span><span class="title">Reformation, Säkularisierung und Leibeigenschaft</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Kirche, Herzogskrone von Pommern-Wolgast und Gutshof Philippshagen"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M60 84 v-30 h40 v30 M80 54 v-18 M70 44 l10 -10 10 10 M76 26 h8 M80 22 v8" stroke="#14424E" stroke-width="3" fill="none"/><path d="M180 70 l8 -22 10 12 10 -20 10 20 10 -12 8 22 z" fill="none" stroke="#C98A2B" stroke-width="3"/><path d="M180 76 h56" stroke="#C98A2B" stroke-width="3"/><path d="M270 84 h50 M278 84 v-22 h34 v22 M285 62 v-8 h20 v8" stroke="#5C4A2E" stroke-width="2.5" fill="none"/></svg><figcaption>Zeichnung: Kirche, Herzogskrone von Pommern-Wolgast und Gutshof Philippshagen</figcaption></figure>
+      <p>Mit der Reformation in Pommern (1534/35) endet die fast 300-jährige Klosterzeit: Das Kloster Eldena wird aufgehoben, Mönchgut fällt an die Herzöge von Pommern-Wolgast und wird herzogliches Amt. Für die Bevölkerung bedeutet der Herrschaftswechsel keine Befreiung – im Gegenteil: Zwischen 1605 und 1611 entsteht durch Enteignung von 15 Bauern in Middelhagen, Kleinhagen und Grotenhagen das herzogliche Gut Philippshagen, dem die Mönchguter fortan leibeigen zu Diensten stehen.</p>
+      <p>Zugleich beginnt in Europa die „Kleine Eiszeit": kältere, unbeständigere Jahrhunderte mit Missernten und strengen Wintern, in denen die Ostsee wiederholt zufriert – für die Fischerbauern auf dem kargen Mönchgut harte Zeiten.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://geschichte.ruegens.de/lobbe-ein-kleiner-ort-auf-monchgut-mit-700jahriger-geschichte/" target="_blank">geschichte.ruegens.de: Lobbe</a> · <a href="https://de.wikipedia.org/wiki/Kloster_Eldena_(Vorpommern)" target="_blank">Wikipedia: Kloster Eldena</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 6 -->
+<section class="era" data-cat="krieg herrschaft">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1627–1648</span><span class="title">Dreißigjähriger Krieg: Verwüstung und Schwedenzeit</span><span class="arrow">›</span><span class="tagrow"><span class="tag krieg">Krieg</span><span class="tag herrschaft">Geschichte</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Gekreuzte Piken, brennendes Haus, schwedische Fahne"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M60 20 l50 60 M110 20 l-50 60" stroke="#5C4A2E" stroke-width="4"/><path d="M56 20 l8 -6 M106 14 l8 6" stroke="#5C4A2E" stroke-width="4"/><path d="M170 84 v-28 l18 -14 18 14 v28 z" fill="none" stroke="#14424E" stroke-width="3"/><path d="M182 42 q-4 -14 8 -20 q-8 12 4 20 M196 44 q2 -10 10 -12 q-4 8 0 12" stroke="#8A3B2E" stroke-width="3" fill="none"/><path d="M260 30 v54 M260 30 h46 l-10 10 10 10 h-46" stroke="#C98A2B" stroke-width="3" fill="none"/></svg><figcaption>Zeichnung: Gekreuzte Piken, brennendes Haus, schwedische Fahne</figcaption></figure>
+      <p>Der Dreißigjährige Krieg erreicht Rügen mit voller Härte: Zwischen 1627 und 1631 wird die Insel nacheinander von dänischen, kaiserlichen (Wallenstein) und schwedischen Truppen besetzt, Mönchgut wird verwüstet und geplündert. In Lobbe bleibt von drei Bauernstellen nur eine erhalten; das übrige Land wird dem gutsherrschaftlichen „Bihoff" zugeschlagen.</p>
+      <p>Mit dem Westfälischen Frieden 1648 fällt Rügen an Schweden – der Beginn von fast 200 Jahren schwedischer Herrschaft. Ein Großteil der Landbevölkerung bleibt in Leibeigenschaft gezwungen. Aus dem 17. bis 19. Jahrhundert sind auf Mönchgut noch mehrere Schanzen als Bodendenkmale erhalten – stille Zeugen der militärischen Bedeutung der exponierten Halbinsel an der Boddeneinfahrt.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a> · <a href="https://geschichte.ruegens.de/lobbe-ein-kleiner-ort-auf-monchgut-mit-700jahriger-geschichte/" target="_blank">geschichte.ruegens.de: Lobbe</a> · <a href="https://de.wikipedia.org/wiki/M%C3%B6nchgut" target="_blank">Wikipedia: Mönchgut</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 7 -->
+<section class="era" data-cat="handel klima herrschaft">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1648–1815</span><span class="title">Fischerbauern und Lotsen – Wirtschaft der Schwedenzeit</span><span class="arrow">›</span><span class="tagrow"><span class="tag handel">Handel</span><span class="tag klima">Klima</span><span class="tag herrschaft">Geschichte</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Fischerboot, Lotsenturm Thiessow und Eiskristall der Kleinen Eiszeit"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 78 q25 -10 50 0 t50 0 t50 0 t50 0 t50 0 t50 0" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M50 74 q30 12 64 0 l-6 -8 h-52 z" fill="none" stroke="#5C4A2E" stroke-width="3"/><path d="M82 66 v-26 l22 20 h-22" fill="none" stroke="#C98A2B" stroke-width="2.5"/><path d="M190 84 v-40 h22 v40 M186 44 h30 M197 30 l8 0 M201 26 v8" stroke="#14424E" stroke-width="3" fill="none"/><path d="M270 40 l0 24 M258 46 l24 12 M282 46 l-24 12 M262 36 l16 32 M278 36 l-16 32" stroke="#14424E" stroke-width="2" fill="none"/></svg><figcaption>Zeichnung: Fischerboot, Lotsenturm Thiessow und Eiskristall der Kleinen Eiszeit</figcaption></figure>
+      <p>Unter schwedischer Krone leben die Mönchguter – die sich selbst „Poken" nennen – von Fischfang, Ackerbau und Schafzucht auf kargem Boden. Eine besondere Einnahmequelle ist das Lotsenwesen: Frachtschiffe, die von der Ostsee nach Greifswald oder Stralsund wollen, brauchen Lotsen, um durch die Untiefen vor Thiessow zu kommen. Die Fischerbauern sind zudem angesehene Bootsbauer.</p>
+      <p>Die Kleine Eiszeit erreicht um das Maunder-Minimum (ca. 1645–1715) ihren Höhepunkt: strenge Eiswinter, kurze Vegetationsperioden, immer wieder Sturmfluten. Erst 1806 hebt der schwedische König Gustav IV. die Leibeigenschaft auf. In den napoleonischen Kriegen wird Rügen kurzzeitig französisch besetzt, ehe der Wiener Kongress 1815 die Insel Preußen zuschlägt – das Ende der Schwedenzeit.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.paradies-ruegen.de/ruegen-entdecken/ruegens-regionen/sued-ruegen/" target="_blank">paradies-ruegen.de: Mönchgut (Poken, Lotsen)</a> · <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 8 -->
+<section class="era" data-cat="herrschaft handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1815–1870</span><span class="title">Preußische Zeit: Eigener Boden, neue Wälder</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Pflug und junge Kiefern – Aufforstung der Baaber Heide"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M20 80 h130" stroke="#5C4A2E" stroke-width="3"/><path d="M40 80 q0 -18 22 -18 h30 l16 18 M62 62 v-14 l20 14" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M200 84 v-20 M188 66 l12 -18 12 18 M191 52 l9 -14 9 14" stroke="#3E6B4F" stroke-width="3" fill="none"/><path d="M245 84 v-16 M236 70 l9 -14 9 14" stroke="#3E6B4F" stroke-width="3" fill="none"/><path d="M285 84 v-24 M274 62 l11 -18 11 18 M277 48 l8 -12 8 12" stroke="#3E6B4F" stroke-width="3" fill="none"/><circle cx="310" cy="22" r="10" fill="none" stroke="#C98A2B" stroke-width="2.5"/></svg><figcaption>Zeichnung: Pflug und junge Kiefern – Aufforstung der Baaber Heide</figcaption></figure>
+      <p>Unter Preußen beginnt für Mönchgut ein wirtschaftlicher Aufschwung: Um 1850 können Bauern und Landarbeiter erstmals eigenen Grund und Boden erwerben – nach Jahrhunderten von Kloster-, Herzogs- und Gutsabhängigkeit ein historischer Einschnitt. Die Baaber Heide wird mit Wald bepflanzt, Bauten zum Schutz vor Hochwasser entstehen.</p>
+      <p>Die Halbinsel bleibt dennoch eine Welt für sich: Die berühmten Mönchguter Trachten, der eigene Dialekt und die Kultur der Fischerbauern prägen den Alltag. Genau diese Ursprünglichkeit wird wenige Jahrzehnte später zum touristischen Kapital.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a> · <a href="https://info-goehren.de/ostseebad-goehren-information/goehrens-historie/" target="_blank">FVGV Göhren: Göhren historisch</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- Lotsenturm -->
+<section class="era" data-cat="handel herrschaft">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1854–2003</span><span class="title">Der Lotsenturm von Thiessow – Form und Funktion</span><span class="arrow">›</span><span class="tagrow"><span class="tag handel">Handel</span><span class="tag herrschaft">Geschichte</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Lotsenturm Thiessow mit Lotsenwache, Flaggenmast und Glocke">
+<svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img">
+<path d="M10 88 H330" stroke="#14424E" stroke-width="2"/>
+<path d="M140 88 L152 22 H188 L200 88" fill="none" stroke="#5C4A2E" stroke-width="3"/>
+<path d="M144 72 L196 52 M144 52 L196 72 M147 52 L193 32 M147 32 L193 52" stroke="#5C4A2E" stroke-width="2"/>
+<path d="M146 52 h48 M149 32 h42" stroke="#5C4A2E" stroke-width="2.5"/>
+<path d="M148 22 h44 M144 22 l26 -12 26 12" fill="none" stroke="#14424E" stroke-width="3"/>
+<path d="M152 22 v-6 h36 v6" stroke="#14424E" stroke-width="2" fill="none"/>
+<path d="M60 88 v-22 h44 v22 M56 66 l26 -14 26 14 M74 88 v-10 h12 v10" fill="none" stroke="#8A3B2E" stroke-width="2.5"/>
+<path d="M250 88 v-58 M250 30 h30 l-8 8 8 8 h-30" fill="none" stroke="#C98A2B" stroke-width="2.5"/>
+<path d="M300 60 q-8 2 -8 10 h20 q0 -8 -8 -10 M302 70 v6" stroke="#14424E" stroke-width="2.5" fill="none"/>
+<circle cx="302" cy="56" r="3" fill="#14424E"/>
+</svg><figcaption>Zeichnung: Lotsenturm auf dem Lotsenberg, Lotsenwache von 1854, Signalflagge und Lotsenglocke</figcaption></figure>
+      <p>Kein Bauwerk erzählt die Wirtschaftsgeschichte Mönchguts besser als der Lotsenturm auf dem 36 Meter hohen Lotsenberg am Südperd. Schon im 17. Jahrhundert warten ortskundige Fischer hier oben auf Schiffe, die durch die gefährlichen Untiefen zwischen Ostsee und Greifswalder Bodden wollen. 1854 wird das Lotsenwesen staatlich geordnet: Thiessow wird Sitz des königlichen Lotsenkommandeurs für das Revier zwischen Darßer Ort und Usedom, und am Berg entsteht die steinerne Lotsenwache – ein kleines Ziegelhaus auf Feldsteinsockel, zunächst reetgedeckt.</p>
+      <p>Die Funktion ist ein ausgeklügeltes Signalsystem: Erspäht der wachhabende Lotse ein Schiff, hisst er eine Flagge am Mast und alarmiert per Lotsenglocke (gegossen 1842) die Kollegen im Dorf; eine „Unterwache" – anfangs eine alte hölzerne Seetonne – gibt die Signale weiter. 1892/93 erhält die Wache ein hölzernes Obergeschoss mit umlaufender Galerie; als Bäume die Sicht verstellen, wird 1909 daneben der eigentliche Lotsenturm errichtet: elf Meter hoch, ein mit Holz verkleidetes Stahlgerüst mit Aussichtsplattform – die charakteristische, sich nach oben verjüngende Form, die der Turm bis heute trägt.</p>
+      <p>Bis 1977 ist der Turm in Betrieb, dann machen Radar und GPS die Lotsen vor Thiessow überflüssig, und der Turm verfällt. 1999 wird die Lotsenwache saniert (innen mit dem historischen hellblauen Anstrich), 2003 der Turm nach historischem Vorbild wieder aufgebaut – finanziert mit Hilfe von Mobilfunkanbietern, deren Antennen er heute trägt. Von der überdachten Plattform in 13 Metern Höhe reicht der Blick über Klein und Groß Zicker, die Granitz und das Nordperd bis zur Greifswalder Oie, nach Usedom und bei klarer Sicht bis Wollin.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://de.wikipedia.org/wiki/Lotsenturm_Thiessow" target="_blank">Wikipedia: Lotsenturm Thiessow</a> · <a href="https://www.ruegenmagic.de/Aussichtspunkte-Ruegen/aussichtspunkt-lotsenturm-thiessow.html" target="_blank">ruegenmagic.de: Lotsenturm Thiessow</a> · <a href="https://www.ruegen-aktuell.de/2019/12/lotsenturm-in-thiessow/" target="_blank">Rügen-Aktuell: Lotsenturm in Thiessow</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 9 -->
+<section class="era" data-cat="klima">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1872</span><span class="title">Die Jahrhundertflut: 50 Häuser auf Mönchgut zerstört</span><span class="arrow">›</span><span class="tagrow"><span class="tag klima">Klima</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Die Flutwelle vom 13. November 1872 über den Häusern, Pegel 3,3 Meter"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M30 88 v-24 l14 -12 14 12 v24 M120 88 v-20 l12 -10 12 10 v20" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M10 88 q40 -70 110 -44 q60 22 60 44" stroke="#8A3B2E" stroke-width="4" fill="none"/><path d="M96 36 q18 -16 40 -8 M84 52 q12 -10 26 -6" stroke="#8A3B2E" stroke-width="3" fill="none"/><path d="M250 84 v-56 M242 30 h16 M244 42 h12 M240 84 h20" stroke="#14424E" stroke-width="3" fill="none"/><path d="M250 40 h44" stroke="#C98A2B" stroke-width="2.5" stroke-dasharray="5 4"/><text x="256" y="34" font-size="11" fill="#C98A2B" font-family="sans-serif">+3,3 m</text></svg><figcaption>Zeichnung: Die Flutwelle vom 13. November 1872 über den Häusern, Pegel 3,3 Meter</figcaption></figure>
+      <p>In der Nacht vom 12. auf den 13. November 1872 trifft das schwerste bekannte Ostseesturmhochwasser die Küste von Dänemark bis Pommern. Nach tagelangen Weststürmen dreht der Wind schlagartig auf Nordost-Orkan und presst das aufgestaute Wasser zurück – der berüchtigte „Badewanneneffekt". Insgesamt sterben 271 Menschen, Tausende Häuser werden zerstört.</p>
+      <p>Auf Mönchgut werden die Dünen bei Göhren und Thiessow vernichtet; allein in Lobbe, Thiessow, Groß und Klein Zicker werden über 50 Häuser zerstört oder schwer beschädigt. In Baabe flüchten Bewohner auf die Dächer. Die Flut von 1872 bildet bis heute den Bemessungsmaßstab für den Küstenschutz an der deutschen Ostseeküste – und markiert zugleich den Beginn systematischer Pegelmessungen.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://de.wikipedia.org/wiki/Ostseesturmhochwasser_1872" target="_blank">Wikipedia: Ostseesturmhochwasser 1872</a> · <a href="https://das-blaettchen.de/2018/09/sturmflut-auf-ruegen-45600.html" target="_blank">Das Blättchen: Sturmflut auf Rügen</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 10 -->
+<section class="era" data-cat="tourismus handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1870–1914</span><span class="title">Die Geburt der Seebäder: Göhren, Baabe, Thiessow</span><span class="arrow">›</span><span class="tagrow"><span class="tag tourismus">Tourismus</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Seebrücke, Bädervilla und Baededampfer um 1900"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 84 q30 -8 60 0 t60 0 t60 0 t60 0 t60 0" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M20 76 h130 M40 76 v8 M70 76 v8 M100 76 v8 M130 76 v8" stroke="#5C4A2E" stroke-width="3"/><path d="M200 84 v-34 h44 v34 M196 50 l26 -16 26 16 M214 84 v-12 h16 v12 M208 60 h8 M228 60 h8" stroke="#C98A2B" stroke-width="2.5" fill="none"/><path d="M280 80 h44 l-8 8 h-28 z M292 80 v-10 h20 v10 M298 70 v-8 M298 62 q8 -6 4 -12" stroke="#14424E" stroke-width="2.5" fill="none"/></svg><figcaption>Zeichnung: Seebrücke, Bädervilla und Baededampfer um 1900</figcaption></figure>
+      <p>Um 1870 entdecken die ersten Badegäste die Landschaft Mönchguts; 1878 wird Göhren offiziell zum Seebad erklärt – damals mit gerade 245 Einwohnern (1885). 1887 gründet Gräfin Adeline von Schimmelmann in Göhren das weltweit erste Seemannsheim. Der entscheidende Schub kommt 1899 mit dem Anschluss an die Schmalspurbahn „Rasender Roland": Hotels und Pensionen im Stil der Bäderarchitektur entstehen, 1900 werden bereits 6.700 Gäste gezählt.</p>
+      <p>1912/13 wird am Göhrener Südstrand mit 1.076 Metern die längste je an der deutschen Ostseeküste errichtete Seebrücke fertiggestellt – zu Beginn des Ersten Weltkriegs ist sie schon wieder abgerissen. Der Tourismus löst binnen einer Generation Fischfang und Landwirtschaft als wichtigste Erwerbsquelle ab und bleibt es bis heute.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a> · <a href="https://de.wikipedia.org/wiki/G%C3%B6hren_(R%C3%BCgen)" target="_blank">Wikipedia: Göhren (Rügen)</a> · <a href="https://info-goehren.de/ostseebad-goehren-information/goehrens-historie/" target="_blank">FVGV Göhren: Göhren historisch</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- Flugboote & Bäderdampfer -->
+<section class="era" data-cat="tourismus handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1920er/30er</span><span class="title">Wasserflugzeuge auf dem Selliner See, Bäderdampfer und Seebrücken</span><span class="arrow">›</span><span class="tagrow"><span class="tag tourismus">Tourismus</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Junkers-Wasserflugzeug über Bäderdampfer und Seebrücke">
+<svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img">
+<path d="M10 86 q30 -8 60 0 t60 0 t60 0 t60 0 t60 0" stroke="#14424E" stroke-width="2.5" fill="none"/>
+<path d="M60 34 h90 M100 34 v-8 h20 l14 8 M60 34 l14 8 h50" fill="none" stroke="#C98A2B" stroke-width="3"/>
+<path d="M80 42 v10 M124 42 v10 M70 54 h26 M114 54 h26" stroke="#C98A2B" stroke-width="2.5"/>
+<circle cx="150" cy="30" r="5" fill="none" stroke="#C98A2B" stroke-width="2"/>
+<path d="M200 80 q30 12 66 0 l-8 -10 h-50 z M218 70 v-12 h26 v12 M228 58 v-10 M228 48 q10 -8 4 -14" fill="none" stroke="#14424E" stroke-width="3"/>
+<path d="M280 78 h50 M290 78 v8 M310 78 v8 M326 78 v8" stroke="#5C4A2E" stroke-width="3"/>
+<path d="M300 78 v-12 h18 v12" fill="none" stroke="#5C4A2E" stroke-width="2.5"/>
+</svg><figcaption>Zeichnung: Junkers F 13 über Bäderdampfer und Seebrücke mit Badehaus</figcaption></figure>
+      <p>In den Goldenen Zwanzigern erreicht man die Rügener Bäder auf drei Wegen: mit dem Rasenden Roland, dem Bäderdampfer – und dem Flugzeug. 1921 erhält Rügen mit der Linie Travemünde–Warnemünde–Sassnitz–Swinemünde erstmals Anschluss an den Fluglinienverkehr. 1925 wassern die ersten Wasserflugzeuge an der Selliner Seebrücke; wegen des Wellengangs verlegt man den Landeplatz schon 1926 auf den ruhigen Selliner See. Die neu gegründete Deutsche Luft Hansa betreibt fortan die planmäßige Sommerfluglinie Stettin–Sellin–Stralsund, mit Anschluss aus Berlin über Stettin; von der Stralsunder „Flugstation" am Hindenburgufer führt eine weitere Linie über die Boddenlandschaft nach Kloster auf Hiddensee. Geflogen wird vor allem mit der legendären Junkers F 13, später mit der W 33/34 – Passagiere aus Pommern und Berlin, zunehmend auch Luftpost. Am „Flughafen" beim Fährhaus warten Boote der Reederei Gebr. Wittmiß, die die Fluggäste in die umliegenden Bäder bringen; Start und Landung sind Volksschauspiele. Mit dem Zweiten Weltkrieg endet die Linie endgültig.</p>
+      <p>Parallel blüht der Seebäderverkehr: Schnelldampfer verbinden Stettin und Swinemünde mit den Bädern der Küste – auch Binz, Sellin, Göhren und Thiessow werden angelaufen. Es gibt sogar einen „Flugzeug-Dampfer-Gemeinschaftsdienst", bei dem man hin fliegt und mit dem Braeunlich-Dampfer zurückfährt. Zum Anlegen brauchen die Dampfer Seebrücken; wo keine steht, werden die Gäste „ausgebootet". Auch das kleine Thiessow hat eine eigene Seebrücke samt Badehäusern am Strand – im eisigen Winter 1912 wird die Brücke durch Eisgang zerstört. Von den Thiessower Badehäusern, einst beliebter Fotohintergrund der Sommerfrischler, ist heute nichts mehr erhalten; nur alte Ansichtskarten zeugen von dieser Epoche.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://das-blaettchen.de/2018/08/%E2%80%9Efliegt-in-die-baeder-45248.html" target="_blank">Das Blättchen: „Fliegt in die Bäder!"</a> · <a href="https://www.myheimat.de/fahrenzhausen/kultur/wasserflugzeuge-erobern-den-selliner-see-auf-ruegen-d2796080.html" target="_blank">myheimat.de: Wasserflugzeuge auf dem Selliner See</a> · <a href="https://www.ortschroniken-mv.de/index.php/Ostseeb%C3%A4der_Geschichte" target="_blank">ortschroniken-mv.de: Ostseebäder-Geschichte (Dampfer, Seebrücken, Badehäuser)</a> · <a href="https://www.facebook.com/ruegenmuseen/photos/im-winter-1912-wurde-die-seebr%C3%BCcke-von-thiessow-durch-eisgang-zerst%C3%B6rt-das-foto-/652828737270091/" target="_blank">Mönchguter Museen: Seebrücke Thiessow 1912</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 11 -->
+<section class="era" data-cat="krieg herrschaft">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1914–1945</span><span class="title">Weltkriege, Zäsuren und Flüchtlingsströme</span><span class="arrow">›</span><span class="tagrow"><span class="tag krieg">Krieg</span><span class="tag herrschaft">Geschichte</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Stacheldraht und graues Schiff – die Weltkriege"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M20 60 h300" stroke="#5C4A2E" stroke-width="2"/><path d="M40 60 l14 -12 M54 60 l-14 -12 M100 60 l14 -12 M114 60 l-14 -12 M160 60 l14 -12 M174 60 l-14 -12" stroke="#5C4A2E" stroke-width="2.5"/><path d="M230 78 h80 l-10 10 h-60 z M244 78 v-14 h52 v14 M262 64 v-10" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M20 88 q40 8 80 0 t80 0 t80 0 t60 0" stroke="#14424E" stroke-width="2" fill="none"/></svg><figcaption>Zeichnung: Stacheldraht und graues Schiff – die Weltkriege</figcaption></figure>
+      <p>Die beiden Weltkriege unterbrechen die Bäderentwicklung. In der NS-Zeit entsteht wenige Kilometer nördlich das gigantische KdF-Seebad Prora – ein Symbol des ideologisch gelenkten Massentourismus, das nie in Betrieb geht. Mönchgut selbst bleibt von direkten Kampfhandlungen weitgehend verschont, doch das Kriegsende 1945 verändert die Halbinsel tiefgreifend.</p>
+      <p>Nach dem Krieg strömen Heimatvertriebene und Flüchtlinge aus den deutschen Ostgebieten nach Rügen; um 1950 hat sich die Bevölkerungsstruktur der Insel grundlegend gewandelt. Die sowjetische Besatzungsmacht enteignet die Großgrundbesitzer, das Land wird zunächst an Bauern und Landarbeiter verteilt – bevor wenig später die Kollektivierung folgt.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.paradies-ruegen.de/ruegen-entdecken/insel-ruegen-geschichte/" target="_blank">paradies-ruegen.de: Geschichte Rügens</a> · <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 12 -->
+<section class="era" data-cat="herrschaft tourismus">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1945–1990</span><span class="title">DDR: „Aktion Rose", FDGB-Ferien und Campingboom</span><span class="arrow">›</span><span class="tagrow"><span class="tag herrschaft">Geschichte</span><span class="tag tourismus">Tourismus</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Zeltplatz, Trabant und FDGB-Fahne – Urlaub in der DDR"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M30 84 l26 -38 26 38 z M56 46 v38" stroke="#3E6B4F" stroke-width="3" fill="none"/><path d="M130 84 h70 q6 0 6 -8 q0 -8 -10 -8 h-8 l-12 -12 h-24 l-10 12 h-6 q-6 0 -6 8 z" fill="none" stroke="#14424E" stroke-width="3"/><circle cx="150" cy="84" r="7" fill="none" stroke="#14424E" stroke-width="3"/><circle cx="192" cy="84" r="7" fill="none" stroke="#14424E" stroke-width="3"/><path d="M260 84 v-52 M260 32 h44 v22 h-44" stroke="#8A3B2E" stroke-width="3" fill="none"/><text x="266" y="49" font-size="12" fill="#8A3B2E" font-family="sans-serif" font-weight="bold">FDGB</text></svg><figcaption>Zeichnung: Zeltplatz, Trabant und FDGB-Fahne – Urlaub in der DDR</figcaption></figure>
+      <p>1953 trifft die „Aktion Rose" auch Mönchgut: Zahlreiche private Hotel-, Pensions- und Gaststättenbesitzer werden unter fadenscheinigen Vorwürfen enteignet, viele verhaftet oder zur Flucht gedrängt; die Häuser gehen an den FDGB-Feriendienst und andere DDR-Institutionen. In Göhren erinnert heute ein Gedenkstein an die Opfer. 1960 folgt die Zwangskollektivierung der letzten freien Bauern.</p>
+      <p>Zugleich wird der Urlaub massenhaft organisiert: 1962–64 entstehen Urlauberdörfer mit einfachen Holzunterkünften, 1965 der Campingplatz Richtung Baabe. 1976 zählt Göhren bei 1.800 Einwohnern rund 4.400 Gästebetten und jährlich über 70.000 Feriengäste – fast alle über den FDGB vergeben. Ein Ostseeplatz ist begehrt und knapp – rein statistisch kommt jeder DDR-Bürger etwa alle zehn Jahre einmal nach Rügen. Die Bäderarchitektur verfällt derweil mangels Pflege, während die Küstenfischerei in Genossenschaften weiterbesteht.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://de.wikipedia.org/wiki/G%C3%B6hren_(R%C3%BCgen)" target="_blank">Wikipedia: Göhren (Rügen)</a> · <a href="https://www.paradies-ruegen.de/ruegen-entdecken/insel-ruegen-geschichte/" target="_blank">paradies-ruegen.de: Geschichte Rügens</a> · <a href="https://campingkunst.de/goehren-geschichte-und-tourismus/" target="_blank">campingkunst.de: Göhren – Geschichte und Tourismus</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 13 -->
+<section class="era" data-cat="tourismus herrschaft handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">1990–2010</span><span class="title">Wende, Biosphärenreservat und Bauboom</span><span class="arrow">›</span><span class="tagrow"><span class="tag tourismus">Tourismus</span><span class="tag herrschaft">Geschichte</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Baukran, saniertes Reetdachhaus und Blatt des Biosphärenreservats"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M40 84 v-56 M40 28 h70 M96 28 v14 M92 42 h8 M56 28 l-16 16" stroke="#5C4A2E" stroke-width="3" fill="none"/><path d="M150 84 v-24 l22 -18 22 18 v24 z M158 60 q14 -8 28 0" stroke="#14424E" stroke-width="3" fill="none"/><path d="M260 80 q-14 -34 22 -48 q6 34 -22 48 M262 76 q10 -20 18 -36" stroke="#3E6B4F" stroke-width="3" fill="none"/><circle cx="305" cy="66" r="14" fill="none" stroke="#C98A2B" stroke-width="2.5"/><path d="M298 66 h14 M305 59 v14" stroke="#C98A2B" stroke-width="2"/></svg><figcaption>Zeichnung: Baukran, saniertes Reetdachhaus und Blatt des Biosphärenreservats</figcaption></figure>
+      <p>Mit der Wiedervereinigung bricht das staatliche Erholungswesen zusammen: FDGB-Heime schließen, verfallen und werden erst nach Jahren privatisiert. Zugleich setzt ein Bauboom ein – Hotels, Pensionen und Ferienanlagen entstehen, die Bäderarchitektur wird in liebevoller Kleinarbeit restauriert. Spannungen zwischen Naturschützern und Investoren bleiben nicht aus.</p>
+      <p>1991 wird Südost-Rügen UNESCO-Biosphärenreservat; Mönchgut gehört vollständig dazu, der überwiegende Teil zusätzlich zum Naturschutzgebiet Mönchgut. Damit wird die einzigartige Kulturlandschaft – Salzwiesen, Zickersche Berge, Steilküsten – dauerhaft geschützt und zugleich zum Markenkern des Tourismus. Die Mönchguter Museen (Heimatmuseum, Museumshof, Rookhus, Motorsegler „Luise") bewahren die Kultur der Fischerbauern.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.paradies-ruegen.de/ruegen-entdecken/insel-ruegen-geschichte/" target="_blank">paradies-ruegen.de: Geschichte Rügens</a> · <a href="https://de.wikipedia.org/wiki/M%C3%B6nchgut" target="_blank">Wikipedia: Mönchgut</a> · <a href="https://www.thiessow.net/" target="_blank">thiessow.net: Ostseebad Thiessow</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- 14 -->
+<section class="era" data-cat="tourismus klima handel">
+  <span class="dot"></span>
+  <details class="card">
+    <summary class="head"><span class="year">2010–heute</span><span class="title">Tourismus als Lebensader – Klimawandel als Herausforderung</span><span class="arrow">›</span><span class="tagrow"><span class="tag tourismus">Tourismus</span><span class="tag klima">Klima</span><span class="tag handel">Handel</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Kitesurfer vor Thiessow und Pegel des Meeresspiegelanstiegs"><svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img"><path d="M10 84 q30 -10 60 0 t60 0 t60 0 t60 0 t60 0" stroke="#14424E" stroke-width="3" fill="none"/><path d="M70 30 q26 -18 46 2 q-26 8 -46 -2" fill="none" stroke="#C98A2B" stroke-width="3"/><path d="M96 34 q10 22 4 40 M100 74 q8 -6 16 -2 l-18 8 z" stroke="#14424E" stroke-width="2.5" fill="none"/><path d="M240 84 v-60 M232 28 h16 M234 44 h12 M234 60 h12" stroke="#14424E" stroke-width="3" fill="none"/><path d="M240 36 h56" stroke="#8A3B2E" stroke-width="2.5" stroke-dasharray="5 4"/><text x="246" y="30" font-size="11" fill="#8A3B2E" font-family="sans-serif">+0,75 m / 2100</text></svg><figcaption>Zeichnung: Kitesurfer vor Thiessow und Pegel des Meeresspiegelanstiegs</figcaption></figure>
+      <p>Heute lebt Mönchgut fast vollständig vom Tourismus: Ostseebäder wie Göhren, Baabe und Thiessow, Ferienwohnungen, kleine Häfen mit Küstenfischerei und Marina (Gager), Surf- und Kite-Reviere bei Thiessow und Klein Zicker. Göhren wird als erster Ort Mecklenburg-Vorpommerns Kneipp-Kurort. Wie sehr Investoreninteressen und Dorfgemeinschaft ringen, zeigt der Dokumentarfilm „Wem gehört mein Dorf?" (2021) über Göhren.</p>
+      <p>Der Klimawandel rückt zugleich die alte Bedrohung durch die See wieder in den Blick: Die Sturmhochwasser von 2017, 2019 und 2023 verursachten Millionenschäden; die Küstenländer rechnen mit rund 0,75 Metern Meeresspiegelanstieg bis Ende des Jahrhunderts. Mecklenburg-Vorpommern investiert etwa 20 Millionen Euro jährlich in den Küstenschutz – die Flut von 1872 bleibt dabei der Bemessungsmaßstab. Die Geschichte der Halbinsel zwischen Bodden und offener See schreibt sich fort.</p>
+      <div class="src"><b>Quellen:</b> <a href="https://www.nordschleswiger.dk/de/suedschleswig/ostseesturmflut-von-1872-als-vor-150-jahren-maechtigste-hochwasser-wuetete" target="_blank">Der Nordschleswiger: 150 Jahre Ostseesturmflut</a> · <a href="https://de.wikipedia.org/wiki/G%C3%B6hren_(R%C3%BCgen)" target="_blank">Wikipedia: Göhren (Rügen)</a> · <a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren – Geschichte</a></div>
+    </div>
+  </details>
+</section>
+
+<!-- Ausblick / Szenario -->
+<section class="era" data-cat="tourismus klima handel">
+  <span class="dot"></span>
+  <details class="card szenario">
+    <summary class="head"><span class="year">2026–2035</span><span class="title">Ausblick: Krise, Coolcation und die stille Ankunft der Roboter</span><span class="arrow">›</span><span class="tagrow"><span class="tag tourismus">Tourismus</span><span class="tag klima">Klima</span><span class="tag handel">Handel</span><span class="tag szenario-tag">Szenario</span></span></summary>
+    <div class="body-inner"><figure class="vignette" aria-label="Zeichnung: Autonomer Shuttlebus, Serviceroboter und Sonne über der Ostsee">
+<svg viewBox="0 0 340 100" xmlns="http://www.w3.org/2000/svg" role="img">
+<path d="M10 88 q30 -8 60 0 t60 0 t60 0 t60 0 t60 0" stroke="#14424E" stroke-width="2.5" fill="none"/>
+<circle cx="300" cy="24" r="12" fill="none" stroke="#C98A2B" stroke-width="3"/>
+<path d="M300 6 v6 M300 36 v6 M282 24 h6 M312 24 h6 M287 11 l4 4 M309 33 l4 4 M313 11 l-4 4 M291 33 l-4 4" stroke="#C98A2B" stroke-width="2.5"/>
+<path d="M40 78 q0 -26 26 -26 h60 q26 0 26 26 z" fill="none" stroke="#14424E" stroke-width="3"/>
+<path d="M56 62 h24 M96 62 h24 M92 52 v26" stroke="#14424E" stroke-width="2"/>
+<circle cx="66" cy="78" r="7" fill="none" stroke="#14424E" stroke-width="3"/>
+<circle cx="126" cy="78" r="7" fill="none" stroke="#14424E" stroke-width="3"/>
+<path d="M96 52 v-8 M90 40 q6 -6 12 0" stroke="#3E6B4F" stroke-width="2.5" fill="none"/>
+<rect x="190" y="52" width="26" height="26" rx="6" fill="none" stroke="#5C4A2E" stroke-width="3"/>
+<circle cx="198" cy="62" r="2.5" fill="#5C4A2E"/>
+<circle cx="208" cy="62" r="2.5" fill="#5C4A2E"/>
+<path d="M197 70 q6 4 12 0 M203 52 v-8 M199 44 h8" stroke="#5C4A2E" stroke-width="2.5" fill="none"/>
+<path d="M216 66 h14 M230 60 h14 v6 l-6 4" stroke="#5C4A2E" stroke-width="2.5" fill="none"/>
+</svg><figcaption>Zeichnung: Autonomer Shuttlebus, Serviceroboter mit Frühstückstablett und Ostseesonne</figcaption></figure>
+      <p><em>Die folgenden Absätze zu 2027–2035 sind ein Szenario – eine begründete Zukunftsperspektive, keine belegte Geschichte.</em></p>
+      <p>Zunächst die Krise: Die Jahre 2025/26 treffen die Küste hart. Ein verregneter, kühler Sommer 2025, gestiegene Preise und Kaufzurückhaltung lassen die Gäste ausbleiben – der Branchenverband DEHOGA MV meldet für das erste Halbjahr 2025 einen Umsatzeinbruch von über 17 Prozent gegenüber 2019, auf Rügen steigt die Arbeitslosigkeit im Tourismus binnen Jahresfrist um gut 19 Prozent, traditionsreiche Häuser schließen, und die polnische Ostseeküste wirbt mit neuen Hotels um dieselben Gäste. Zugleich sehen Tourismusexperten im „Coolcation"-Trend die große Chance des Nordens: Wenn das Mittelmeer im Hochsommer regelmäßig 40 Grad überschreitet, wird die frische Brise an der Ostsee vom Manko zum Verkaufsargument.</p>
+      <p>Das Szenario ab etwa 2027: Die Hitzerekorde in Südeuropa häufen sich, Familien buchen um – zurück an die Ostsee. Mönchgut mit seinen Biosphären-Stränden, den Boddenwiesen und der kühlenden Seeluft profitiert überdurchschnittlich; die Saison dehnt sich von April bis weit in den Oktober, die verlorenen 15 Prozent sind bis Anfang der 2030er mehr als aufgeholt. Wer die Krise überstanden hat, erlebt eine zweite Gründerzeit – diesmal unter dem Vorzeichen des Klimas.</p>
+      <p>Und so könnte die Szene 2030–2035 aussehen: Auf der Straße von Baabe nach Thiessow surren leise elektrische, selbstfahrende Shuttlebusse im Zehn-Minuten-Takt – gerufen per Sprachbefehl, barrierefrei, ohne Fahrplan-Studium. Private selbstfahrende Autos setzen ihre Gäste am Ortsrand ab und parken sich außerhalb der Dörfer selbst; der sommerliche Parkplatz-Stress der 2020er ist Geschichte, die Dorfkerne gehören Fußgängern und Rädern. In den Ferienhäusern übernimmt Robotik die Routine: Reinigungsroboter gleiten nach dem Check-out durch die Zimmer, Lieferroboter bringen morgens die Brötchentüte an die Tür der Dünenvilla, der Check-in läuft längst über digitale Schlüssel und KI-Assistenten, die in acht Sprachen Auskunft über Wassertemperatur und Kurkarte geben. Die Menschen aber verschwinden nicht – im Gegenteil: Gastgeber haben wieder Zeit für das, was keine Maschine kann, den Klönschnack am Gartenzaun, den Tipp für die Wanderung zu den Zickerschen Bergen. Und als bewusster Kontrapunkt dampft der Rasende Roland unverdrossen mit Kohle und Schaffner durch die Landschaft – gerade weil er so herrlich unautomatisiert ist. Über allem wacht, wie seit 1909, der Lotsenturm von Thiessow: einst Auge der Schifffahrt, heute Mobilfunkmast – und längst auch Sendemast für die Daten der fahrerlosen Flotte.</p>
+      <p>Auch das Buchen hat sich gewandelt: Ruft ein Gast an oder schreibt per WhatsApp, antwortet ein Voice Agent – eine KI-Stimme, die Verfügbarkeiten kennt, in jeder Sprache berät, Preise und Hundeerlaubnis erklärt und die Buchung samt Anzahlung direkt abschließt; der Vermieter sieht am Abend nur noch die fertige Reservierung und greift bei Sonderwünschen persönlich ein. In der Verpflegung entsteht ein Zwei-Klassen-Genuss: Autonome Gourmetküchen – containergroße Kochroboter, wie sie deutsche Hersteller schon Mitte der 2020er an Supermärkte, die Bundeswehr und die U.S. Army lieferten – kochen frisch, rund um die Uhr und liefern preiswerte, erstaunlich gute Gerichte an Strandkorb und Ferienwohnung; nur die Bestückung der Zutatenbehälter überwacht noch ein Mensch. Die hochwertigen Restaurants mit echten Köchen und echtem Service bleiben derweil der Renner – gerade weil sie das Seltene bieten. Doch ihre Kosten wachsen stetig, denn qualifiziertes Personal ist an der Küste das knappste und teuerste Gut geworden: Der Restaurantbesuch wird zum bewussten Erlebnis, das Roboteressen zur Alltagsversorgung.</p>
+      <p>Unterm Strich ist es für die Gäste eine gute Nachricht – und für die Insel ein positiver Ausblick: Weil Automatisierung die Kosten für Transport, Reinigung, Verpflegung und Verwaltung drückt, sinken die Preise für den Ostseeurlaub spürbar; ein Familienurlaub auf Mönchgut wird wieder erschwinglich, statt Luxus zu sein. Und die vielbeklagte „Servicewüste" der 2020er – geschlossene Küchen ab 20 Uhr, Ruhetage mitten in der Saison, unbesetzte Rezeptionen – verschwindet einfach: Der Voice Agent geht um Mitternacht ans Telefon, die Roboterküche kocht auch am Montag, der Shuttlebus fährt bei jedem Wetter. Die Menschen, die im Tourismus bleiben, machen das, was Urlaub eigentlich ausmacht: Gastfreundschaft. Rügen, das um 2025 vor dem Abstieg gewarnt wurde, geht in diesem Szenario gestärkt aus dem Umbruch hervor – bezahlbarer, verlässlicher und persönlicher als zuvor.</p>
+      <div class="src"><b>Quellen (Ist-Lage 2025/26):</b> <a href="https://www.infranken.de/deutschland/ausflug/ostsee-krise-hotels-restaurants-schliessen-schleswig-holstein-mecklenburg-vorpommern-tourismus-kosten-art-6298893" target="_blank">inFranken/LN: Ostsee-Tourismus am Wendepunkt</a> · <a href="https://www.nordkurier.de/regional/mecklenburg-vorpommern/auf-der-flucht-vor-der-hitze-wird-die-ostsee-bald-noch-mehr-von-urlaubern-ueberrannt-3841270" target="_blank">Nordkurier: Coolcation an der Ostsee</a> · <a href="https://statistik.tourismus.mv/statistische-daten/monatsstatistiken" target="_blank">statistik.tourismus.mv: Monatsstatistiken</a> · <a href="https://www.topagrar.com/perspektiven/news/bei-rewe-und-der-us-army-kochen-jetzt-kuchenroboter-20019936.html" target="_blank">top agrar: Küchenroboter bei Rewe und der U.S. Army</a> · <a href="https://www.hartpunkt.de/ca-1-von-circus-defence-bundeswehr-beschafft-ki-robotik-fuer-die-truppenverpflegung/" target="_blank">hartpunkt: Bundeswehr beschafft KI-Verpflegungsroboter</a> · Zukunftsbild 2027–2035: Szenario des Autors</div>
+    </div>
+  </details>
+</section>
+
+</div>
+
+<div class="quellen">
+  <h2>Quellenverzeichnis</h2>
+  <ol>
+    <li><a href="https://de.wikipedia.org/wiki/M%C3%B6nchgut" target="_blank">Wikipedia: Mönchgut</a> – Geographie, Klosterzeit, Reformation, Bodendenkmale</li>
+    <li><a href="https://de.wikipedia.org/wiki/G%C3%B6hren_(R%C3%BCgen)" target="_blank">Wikipedia: Göhren (Rügen)</a> – Seebadgeschichte, DDR-Zeit, Aktion Rose, Rasender Roland</li>
+    <li><a href="https://www.goehren-ruegen.de/geschichte/von-der-steinzeit-bis-in-die-moderne/" target="_blank">Ostseebad Göhren: Von der Steinzeit bis in die Moderne</a> – offizielle Ortschronik</li>
+    <li><a href="https://geschichte.ruegens.de/lobbe-ein-kleiner-ort-auf-monchgut-mit-700jahriger-geschichte/" target="_blank">geschichte.ruegens.de: Lobbe</a> – Klostererwerb, Gut Philippshagen, Dreißigjähriger Krieg</li>
+    <li><a href="https://de.wikipedia.org/wiki/Kloster_Eldena_(Vorpommern)" target="_blank">Wikipedia: Kloster Eldena (Vorpommern)</a> – Klostergeschichte und Säkularisierung</li>
+    <li><a href="https://de.wikipedia.org/wiki/Ostseesturmhochwasser_1872" target="_blank">Wikipedia: Ostseesturmhochwasser 1872</a> und <a href="https://de.wikipedia.org/wiki/Ostseesturmhochwasser" target="_blank">Ostseesturmhochwasser</a> – Fluten 1304 und 1872</li>
+    <li><a href="https://das-blaettchen.de/2018/09/sturmflut-auf-ruegen-45600.html" target="_blank">Das Blättchen: Sturmflut auf Rügen</a> – Flutchronik, Neues Tief, Schäden auf Mönchgut</li>
+    <li><a href="https://www.paradies-ruegen.de/ruegen-entdecken/insel-ruegen-geschichte/" target="_blank">paradies-ruegen.de: Geschichte Rügens</a> – Schwedenzeit, DDR, Nachwendezeit</li>
+    <li><a href="https://www.paradies-ruegen.de/ruegen-entdecken/ruegens-regionen/sued-ruegen/" target="_blank">paradies-ruegen.de: Halbinsel Mönchgut</a> – Poken, Lotsenwesen, Kirche Groß Zicker</li>
+    <li><a href="https://info-goehren.de/ostseebad-goehren-information/goehrens-historie/" target="_blank">FVGV Göhren e.V.: Göhren historisch</a> – Gästezahlen, Seebrücken, DDR-Urlauberdörfer</li>
+    <li><a href="https://campingkunst.de/goehren-geschichte-und-tourismus/" target="_blank">campingkunst.de: Göhren</a> – FDGB-Feriendienst, Aktion Rose, Camping in der DDR</li>
+    <li><a href="https://www.nordschleswiger.dk/de/suedschleswig/ostseesturmflut-von-1872-als-vor-150-jahren-maechtigste-hochwasser-wuetete" target="_blank">Der Nordschleswiger (2022)</a> – Küstenschutz, Meeresspiegelanstieg, Sturmfluten 2017/2019</li>
+    <li><a href="https://de.wikipedia.org/wiki/Lotsenturm_Thiessow" target="_blank">Wikipedia: Lotsenturm Thiessow</a> – Baugeschichte, Signalwesen, Wiederaufbau 2003</li>
+    <li><a href="https://www.ruegenmagic.de/Aussichtspunkte-Ruegen/aussichtspunkt-lotsenturm-thiessow.html" target="_blank">ruegenmagic.de: Lotsenturm Thiessow</a> – Chronologie des Lotsenwesens 1630–2003</li>
+    <li><a href="https://das-blaettchen.de/2018/08/%E2%80%9Efliegt-in-die-baeder-45248.html" target="_blank">Das Blättchen: „Fliegt in die Bäder!"</a> – Luftverkehr nach Rügen in den 1920er/30er Jahren</li>
+    <li><a href="https://www.myheimat.de/fahrenzhausen/kultur/wasserflugzeuge-erobern-den-selliner-see-auf-ruegen-d2796080.html" target="_blank">myheimat.de: Wasserflugzeuge auf dem Selliner See</a> – Luft-Hansa-Linie Stettin–Sellin–Stralsund</li>
+    <li><a href="https://www.ortschroniken-mv.de/index.php/Ostseeb%C3%A4der_Geschichte" target="_blank">ortschroniken-mv.de: Ostseebäder-Geschichte</a> – Bäderdampfer, Seebrücken und Badehäuser</li>
+    <li><a href="https://www.facebook.com/ruegenmuseen/photos/im-winter-1912-wurde-die-seebr%C3%BCcke-von-thiessow-durch-eisgang-zerst%C3%B6rt-das-foto-/652828737270091/" target="_blank">Mönchguter Museen</a> – Zerstörung der Thiessower Seebrücke durch Eisgang 1912</li>
+    <li><a href="https://www.infranken.de/deutschland/ausflug/ostsee-krise-hotels-restaurants-schliessen-schleswig-holstein-mecklenburg-vorpommern-tourismus-kosten-art-6298893" target="_blank">inFranken/Lübecker Nachrichten (12/2025)</a> – Tourismuskrise 2025: Umsatzeinbruch, Schließungen, Arbeitslosigkeit auf Rügen</li>
+    <li><a href="https://www.nordkurier.de/regional/mecklenburg-vorpommern/auf-der-flucht-vor-der-hitze-wird-die-ostsee-bald-noch-mehr-von-urlaubern-ueberrannt-3841270" target="_blank">Nordkurier (2025): „Coolcation"</a> – Klimawandel als Chance für den Ostsee-Tourismus</li>
+    <li><a href="https://statistik.tourismus.mv/statistische-daten/monatsstatistiken" target="_blank">statistik.tourismus.mv</a> – amtliche Monatsstatistiken zu Ankünften und Übernachtungen in MV</li>
+    <li><a href="https://www.topagrar.com/perspektiven/news/bei-rewe-und-der-us-army-kochen-jetzt-kuchenroboter-20019936.html" target="_blank">top agrar (11/2025)</a> – autonome deutsche Kochroboter (CA-1) bei Rewe und der U.S. Army</li>
+    <li><a href="https://www.hartpunkt.de/ca-1-von-circus-defence-bundeswehr-beschafft-ki-robotik-fuer-die-truppenverpflegung/" target="_blank">hartpunkt (01/2026)</a> – Bundeswehr beschafft KI-Verpflegungsroboter für Kasernenstandort</li>
+  </ol>
+</div>
+</main>
+
+<footer>Mönchgut-Chronik · zusammengestellt Juli 2026 · alle Angaben ohne Gewähr, Quellen jeweils verlinkt</footer>
+
+</body>
+</html>
