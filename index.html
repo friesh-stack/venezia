@@ -1,12 +1,762 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Venedig-Chronik</title>
-<meta http-equiv="refresh" content="0; url=venedig-chronik.html">
-<link rel="canonical" href="venedig-chronik.html">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>myVenezia.com – Ferienwohnungen auf den Inseln der Lagune von Venedig</title>
+<meta name="description" content="Ferienwohnungen in Venedig, Burano, Murano, Mazzorbo, Torcello, Lido, Pellestrina, Giudecca und Sant'Erasmo – direkt beim Gastgeber anfragen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#1B6CA8; --brand-2:#F4C542; --accent:#D9534F; --bg:#FFFDF8;
+  --ink:#1c2430; --muted:#5d6876; --card:#ffffff; --line:#e9e4d8; --water:#d9ecf7;
+  --r:14px; --shadow:0 6px 24px rgba(20,40,70,.10);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0f1720; --ink:#eef2f6; --muted:#a3afbd; --card:#16212d; --line:#26323f; --water:#13314a; --shadow:0 6px 24px rgba(0,0,0,.35); }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3{font-family:"Playfair Display",Georgia,serif;line-height:1.2;margin:0 0 .5em}
+a{color:var(--brand)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+/* Header */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;height:60px}
+.logo{font-family:"Playfair Display",serif;font-weight:700;font-size:1.35rem;color:var(--ink);text-decoration:none;white-space:nowrap}
+.logo span{color:var(--brand)}
+.logo i{font-style:normal;color:var(--accent);font-size:.8em}
+nav.main{display:flex;gap:18px;margin-left:auto}
+nav.main a{color:var(--ink);text-decoration:none;font-weight:500;font-size:.95rem}
+nav.main a:hover{color:var(--brand)}
+.langs{display:flex;gap:4px;margin-left:12px}
+.langs button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:4px 7px;font:600 .75rem Inter,sans-serif;cursor:pointer}
+.langs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+@media (max-width:820px){ nav.main{display:none} .langs{margin-left:auto} }
+@media (max-width:420px){ .logo{font-size:1.1rem} .langs button{padding:3px 5px} }
+/* Hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#bfe0f3 0%,#e9f5fb 55%,var(--bg) 100%)}
+@media (prefers-color-scheme:dark){ .hero{background:linear-gradient(180deg,#123049 0%,#152a3b 60%,var(--bg) 100%)} }
+.hero .wrap{position:relative;z-index:2;padding-top:56px;padding-bottom:200px}
+.kicker{display:inline-block;background:var(--brand-2);color:#3a2c00;font-weight:600;font-size:.8rem;letter-spacing:.04em;padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2rem,6vw,3.4rem);max-width:760px}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:620px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:var(--r);padding:12px 18px;font:600 1rem Inter,sans-serif;cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:var(--card);color:var(--brand);border:1px solid var(--line)}
+.btn.warm{background:var(--accent);color:#fff}
+.btn.wa{background:#25D366;color:#073b1d}
+.houses{position:absolute;left:0;right:0;bottom:0;height:190px;z-index:1}
+.houses svg{width:100%;height:100%;display:block}
+/* Sections */
+section{padding:64px 0}
+.sec-head{max-width:680px;margin-bottom:26px}
+.sec-head p{color:var(--muted);margin:0}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:7px 14px;font:500 .9rem Inter,sans-serif;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line)}
+.ph{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,var(--c1,#1B6CA8),var(--c2,#F4C542));background-size:cover;background-position:center}
+.ph .nm{position:absolute;left:14px;bottom:10px;color:#fff;font:700 1.5rem "Playfair Display",serif;text-shadow:0 2px 10px rgba(0,0,0,.45)}
+.ph .cr{position:absolute;right:8px;top:8px;font-size:.68rem;background:rgba(0,0,0,.45);color:#fff;padding:2px 6px;border-radius:6px;text-decoration:none;display:none}
+.ph.has .cr{display:block}
+.ph.has::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45))}
+.ph .nm,.ph .cr{z-index:1}
+.body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.body p{margin:0;color:var(--muted);font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.75rem;font-weight:600;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand)}
+.meta{font-size:.85rem;color:var(--muted)}
+.meta b{color:var(--ink)}
+.card .btn{margin-top:auto;align-self:flex-start;padding:9px 14px;font-size:.92rem}
+/* Map */
+.mapbox{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
+@media (max-width:820px){ .mapbox{grid-template-columns:1fr} }
+.map{background:var(--water);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;max-width:440px;width:100%;justify-self:center}
+.map svg{display:block;width:100%;height:auto}
+.map .dot{cursor:pointer}
+.map .dot circle{fill:var(--accent);stroke:#fff;stroke-width:2}
+.map .dot text{font:600 12px Inter,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--water);stroke-width:4px}
+.map .dot.on circle{fill:var(--brand-2);r:9}
+.mapinfo{background:var(--card);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);border:1px solid var(--line)}
+/* Stays */
+.stay .ph{aspect-ratio:16/10}
+.soon{border:2px dashed var(--line);border-radius:var(--r);display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;color:var(--muted);min-height:200px}
+/* Form */
+.formcard{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:24px;border:1px solid var(--line);max-width:760px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:600px){ .fgrid{grid-template-columns:1fr} }
+label{display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:.88rem}
+input,select,textarea{font:400 1rem Inter,sans-serif;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+textarea{min-height:90px;resize:vertical}
+.full{grid-column:1/-1}
+.note{font-size:.85rem;color:var(--muted);margin-top:12px}
+.preview{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:.9rem;margin-top:14px;display:none}
+/* Hosts */
+.hosts{background:linear-gradient(135deg,var(--brand),#0f4a76);color:#fff}
+.hosts .sec-head p{color:#d8e8f5}
+.hosts .kicker{background:var(--brand-2)}
+.hostgrid{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:start}
+@media (max-width:820px){ .hostgrid{grid-template-columns:1fr} }
+.benefits{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.benefits li{background:rgba(255,255,255,.09);border-radius:var(--r);padding:14px 16px 14px 46px;position:relative}
+.benefits li::before{content:"✓";position:absolute;left:16px;top:13px;width:20px;height:20px;border-radius:50%;background:var(--brand-2);color:#3a2c00;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center}
+.price{background:#fff;color:var(--ink);border-radius:var(--r);padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.price .big{font:700 3rem "Playfair Display",serif;color:var(--brand);line-height:1}
+.price .zero{display:inline-block;margin:12px 0 4px;background:var(--brand-2);color:#3a2c00;font-weight:700;padding:4px 10px;border-radius:8px}
+.price p{color:#5d6876;font-size:.92rem}
+.soonbox{margin-top:14px;font-size:.88rem;background:#fff7dc;color:#5a4500;padding:10px 12px;border-radius:10px}
+/* Footer */
+footer{padding:40px 0 60px;border-top:1px solid var(--line);font-size:.9rem;color:var(--muted)}
+.fcols{display:flex;flex-wrap:wrap;gap:18px 28px;justify-content:space-between}
+footer a{color:var(--muted)}
+.sig{margin-top:18px;font-size:.82rem}
+.applink{display:inline-block;margin-top:8px;padding:5px 10px;border-radius:8px;background:#111827;color:#fff!important;text-decoration:none;font-size:.8rem}
+.applink b{color:#FF6A3D}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(10,20,30,.55);z-index:50;display:none;align-items:flex-end;justify-content:center}
+.modal.open{display:flex}
+.sheet{background:var(--card);color:var(--ink);width:100%;max-width:720px;max-height:88vh;overflow:auto;border-radius:18px 18px 0 0;padding:0 0 22px}
+@media (min-width:720px){ .modal{align-items:center} .sheet{border-radius:18px} }
+.sheet .ph{aspect-ratio:16/9}
+.sheet .in{padding:18px 22px}
+.x{position:sticky;top:10px;float:right;margin:10px 10px -46px 0;z-index:3;border:0;background:rgba(0,0,0,.55);color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+.legal h3{margin-top:1.2em;font-size:1.1rem}
+.legal p{color:var(--muted);font-size:.92rem}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;display:none;z-index:60}
+</style>
 </head>
 <body>
-<p>Weiterleitung zur <a href="venedig-chronik.html">Venedig-Chronik</a> …</p>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">my<span>Venezia</span><i>.com</i></a>
+    <nav class="main">
+      <a href="#inseln" data-t="nav_islands"></a>
+      <a href="#karte" data-t="nav_map"></a>
+      <a href="#unterkuenfte" data-t="nav_stay"></a>
+      <a href="#anfrage" data-t="nav_ask"></a>
+      <a href="#gastgeber" data-t="nav_hosts"></a>
+    </nav>
+    <div class="langs" id="langs"></div>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <span class="kicker" data-t="hero_kicker"></span>
+    <h1 data-t="hero_title"></h1>
+    <p data-t="hero_sub"></p>
+    <div class="btns">
+      <a class="btn primary" href="#inseln" data-t="cta1"></a>
+      <a class="btn ghost" href="#anfrage" data-t="cta2"></a>
+    </div>
+  </div>
+  <div class="houses" aria-hidden="true">
+    <svg viewBox="0 0 1200 190" preserveAspectRatio="xMidYMax slice">
+      <g id="houseRow"></g>
+      <rect x="0" y="160" width="1200" height="30" fill="#1B6CA8" opacity=".85"/>
+      <path d="M0 168 Q 50 162 100 168 T 200 168 T 300 168 T 400 168 T 500 168 T 600 168 T 700 168 T 800 168 T 900 168 T 1000 168 T 1100 168 T 1200 168" stroke="#bfe0f3" stroke-width="2" fill="none" opacity=".7"/>
+    </svg>
+  </div>
+</div>
+
+<section id="inseln">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-t="islands_title"></h2>
+      <p data-t="islands_sub"></p>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="islandGrid"></div>
+    <p class="note" data-t="lines_note"></p>
+  </div>
+</section>
+
+<section id="karte" style="padding-top:20px">
+  <div class="wrap mapbox">
+    <div class="map"><svg id="mapSvg" viewBox="0 0 360 520" role="img" aria-label="Lagune"></svg></div>
+    <div class="mapinfo" id="mapInfo">
+      <h2 data-t="map_title"></h2>
+      <p class="meta" data-t="map_note"></p>
+    </div>
+  </div>
+</section>
+
+<section id="unterkuenfte" style="background:color-mix(in srgb,var(--brand-2) 12%,var(--bg))">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-t="stay_title"></h2>
+      <p data-t="stay_sub"></p>
+    </div>
+    <div class="grid" id="stayGrid"></div>
+  </div>
+</section>
+
+<section id="anfrage">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 data-t="ask_title"></h2>
+      <p data-t="ask_sub"></p>
+    </div>
+    <form class="formcard" id="askForm" autocomplete="on">
+      <div class="fgrid">
+        <label><span data-t="f_name"></span><input id="fName" required></label>
+        <label><span data-t="f_island"></span><select id="fIsland"></select></label>
+        <label><span data-t="f_from"></span><input id="fFrom" type="date"></label>
+        <label><span data-t="f_to"></span><input id="fTo" type="date"></label>
+        <label><span data-t="f_guests"></span><input id="fGuests" type="number" min="1" max="12" value="2"></label>
+        <label class="full"><span data-t="f_msg"></span><textarea id="fMsg"></textarea></label>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn primary" id="sendMail" data-t="send_mail"></button>
+        <button type="button" class="btn wa" id="sendWa" data-t="send_wa"></button>
+        <button type="button" class="btn ghost" id="copyMsg" data-t="copy"></button>
+      </div>
+      <p class="note"><span data-t="f_note"></span> <span id="mailShow"></span></p>
+      <div class="preview" id="preview"></div>
+    </form>
+  </div>
+</section>
+
+<section id="gastgeber" class="hosts">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-t="host_kicker"></span>
+      <h2 data-t="host_title"></h2>
+      <p data-t="host_sub"></p>
+    </div>
+    <div class="hostgrid">
+      <ul class="benefits">
+        <li data-t="b1"></li><li data-t="b2"></li><li data-t="b3"></li><li data-t="b4"></li>
+      </ul>
+      <div class="price">
+        <div class="meta" data-t="price_title"></div>
+        <div class="big">99 €</div>
+        <p data-t="price_note" style="margin:.4em 0 0"></p>
+        <span class="zero" data-t="zero"></span>
+        <p data-t="compare"></p>
+        <a class="btn warm" id="hostMail" href="#" data-t="host_cta"></a>
+        <div class="soonbox" data-t="host_soon"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <div class="logo" style="font-size:1.2rem">my<span>Venezia</span><i>.com</i></div>
+        <div data-t="foot_claim"></div>
+      </div>
+      <div>
+        <div><a href="https://myburano.com" data-t="foot_burano"></a></div>
+        <div><a href="https://friesh-stack.github.io/venezia/" data-t="foot_chronicle"></a></div>
+        <div><a href="#" id="openImp" data-t="impressum"></a> · <a href="#" id="openPriv" data-t="privacy"></a></div>
+      </div>
+    </div>
+    <p class="note" data-t="photo_credit"></p>
+    <div class="sig"><span data-t="sig"></span><br>
+      <a class="applink" href="https://friesh-stack.github.io/"><span data-t="apps"></span> <b>friesh-Apps</b></a>
+    </div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="sheet"><button class="x" id="closeModal" aria-label="close">×</button><div id="modalBody"></div></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ EINSTELLUNGEN – hier anpassen ============ */
+const CONFIG = {
+  email: 'info@myvenezia.com',      // Empfänger der Gästeanfragen
+  whatsapp: '',                     // z. B. '4917612345678' (ohne +) – leer = WhatsApp-Knopf ausgeblendet
+  hostEmail: 'info@myvenezia.com',  // Vormerkung für Vermieter
+  photoFolder: 'fotos/'             // eigene Fotos: fotos/burano.jpg, fotos/murano.jpg …
+};
+
+/* ============ INSELN ============ */
+const ISLANDS = [
+ {id:'venezia', wiki:'Venice', lat:45.4375, lon:12.3358, tags:['city','art','food'], lines:'hub', c:['#1B6CA8','#D9534F'],
+  t:{de:'Die Altstadt mit ihren sechs Sestieri: Markusplatz, Rialto, Gassen und Kanäle. Ideal für alle, die Kunst, Kultur und Cafés vor der Haustür wollen.',
+     it:'Il centro storico con i suoi sei sestieri: San Marco, Rialto, calli e canali. Ideale per chi vuole arte, cultura e caffè sotto casa.',
+     en:'The historic centre with its six sestieri: St Mark\'s Square, Rialto, alleys and canals. Ideal if you want art, culture and cafés on your doorstep.',
+     fr:'Le centre historique et ses six sestieri : place Saint-Marc, Rialto, ruelles et canaux. Idéal pour avoir l\'art, la culture et les cafés à deux pas.',
+     es:'El centro histórico con sus seis sestieri: plaza de San Marcos, Rialto, callejuelas y canales. Ideal si quieres arte, cultura y cafés a la puerta.',
+     zh:'由六个区组成的历史城区：圣马可广场、里亚托、小巷与运河。适合希望出门即是艺术、文化与咖啡馆的旅客。'}},
+ {id:'giudecca', wiki:'Giudecca', lat:45.4262, lon:12.3255, tags:['quiet','city'], lines:'2 · 4.1 · 4.2', c:['#2c7fb8','#7fcdbb'],
+  t:{de:'Gegenüber den Zattere, nur eine Station von San Marco: venezianischer Alltag, Palladios Redentore-Kirche und der schönste Blick auf die Stadt.',
+     it:'Di fronte alle Zattere, a una fermata da San Marco: vita veneziana quotidiana, il Redentore del Palladio e la vista più bella sulla città.',
+     en:'Opposite the Zattere, one stop from San Marco: everyday Venetian life, Palladio\'s Redentore church and the best view of the city.',
+     fr:'Face aux Zattere, à un arrêt de San Marco : la vie vénitienne au quotidien, l\'église du Redentore de Palladio et la plus belle vue sur la ville.',
+     es:'Frente a las Zattere, a una parada de San Marcos: vida veneciana cotidiana, la iglesia del Redentore de Palladio y la mejor vista de la ciudad.',
+     zh:'与扎特雷沿岸隔水相望，距圣马可仅一站：威尼斯日常生活、帕拉迪奥设计的救主堂，以及欣赏城市的最佳视角。'}},
+ {id:'lido', wiki:'Lido di Venezia', lat:45.405, lon:12.368, tags:['beach','family'], lines:'1 · 5.1 · 5.2 · 14', c:['#F4C542','#1B6CA8'],
+  t:{de:'Die lange Strandinsel zur Adria – Baden, Radfahren, breite Alleen und Jugendstilvillen. Hier fahren sogar Autos und Busse. Heimat des Filmfestivals.',
+     it:'La lunga isola-spiaggia sull\'Adriatico: bagni, biciclette, viali alberati e ville liberty. Qui circolano anche auto e autobus. Sede della Mostra del Cinema.',
+     en:'The long beach island on the Adriatic – swimming, cycling, wide avenues and Art Nouveau villas. Cars and buses run here too. Home of the film festival.',
+     fr:'La longue île-plage sur l\'Adriatique : baignade, vélo, larges avenues et villas Art nouveau. Voitures et bus y circulent. Siège de la Mostra du cinéma.',
+     es:'La larga isla de playa en el Adriático: baño, bicicleta, amplias avenidas y villas modernistas. Aquí circulan coches y autobuses. Sede del Festival de Cine.',
+     zh:'面向亚得里亚海的狭长海滩岛：游泳、骑行、林荫大道与新艺术风格别墅。岛上有汽车和公交通行，也是威尼斯电影节的举办地。'}},
+ {id:'pellestrina', wiki:'Pellestrina', lat:45.28, lon:12.302, tags:['quiet','beach','food'], lines:'Bus 11 + ⛴', c:['#7fcdbb','#F4C542'],
+  t:{de:'Schmale Fischerinsel ganz im Süden zwischen Lagune und Meer: bunte Häuser, die historischen Murazzi-Schutzmauern und frischer Fisch – echte Ruhe.',
+     it:'Sottile isola di pescatori all\'estremo sud, tra laguna e mare: case colorate, gli storici Murazzi e pesce freschissimo. Pace autentica.',
+     en:'A narrow fishing island in the far south between lagoon and sea: colourful houses, the historic Murazzi sea walls and fresh fish – true tranquillity.',
+     fr:'Île de pêcheurs étroite tout au sud, entre lagune et mer : maisons colorées, les murazzi historiques et poisson frais. Un vrai calme.',
+     es:'Estrecha isla de pescadores en el extremo sur, entre laguna y mar: casas de colores, los históricos Murazzi y pescado fresco. Tranquilidad auténtica.',
+     zh:'位于最南端、夹在潟湖与大海之间的狭长渔岛：彩色房屋、历史悠久的防波石墙，以及新鲜海鲜——真正的宁静。'}},
+ {id:'murano', wiki:'Murano', lat:45.4585, lon:12.353, tags:['art','family'], lines:'3 · 4.1 · 4.2 · 12', c:['#D9534F','#F4C542'],
+  t:{de:'Die Insel der Glasbläser: Werkstätten zum Zuschauen, das Glasmuseum und die Basilika Santi Maria e Donato. Nur zehn Minuten von Venedig.',
+     it:'L\'isola dei maestri vetrai: fornaci da visitare, il Museo del Vetro e la basilica dei Santi Maria e Donato. A soli dieci minuti da Venezia.',
+     en:'The glassblowers\' island: workshops you can watch, the Glass Museum and the basilica of Santi Maria e Donato. Just ten minutes from Venice.',
+     fr:'L\'île des souffleurs de verre : ateliers à visiter, musée du Verre et basilique Santi Maria e Donato. À dix minutes de Venise.',
+     es:'La isla de los sopladores de vidrio: talleres para ver trabajar, el Museo del Vidrio y la basílica de Santi Maria e Donato. A solo diez minutos de Venecia.',
+     zh:'玻璃工匠之岛：可参观玻璃作坊、玻璃博物馆和圣母与圣多纳托教堂。距威尼斯仅十分钟。'}},
+ {id:'burano', wiki:'Burano', lat:45.4857, lon:12.4175, tags:['art','food','family'], lines:'12 · 14', c:['#F4C542','#D9534F'],
+  t:{de:'Die bunteste Insel der Lagune: farbige Fischerhäuser, Spitzenkunst im Museo del Merletto, der schiefe Campanile und Risotto di gò. Abends wunderbar still.',
+     it:'L\'isola più colorata della laguna: case dei pescatori dipinte, il Museo del Merletto, il campanile pendente e il risotto di gò. La sera, una quiete meravigliosa.',
+     en:'The most colourful island in the lagoon: painted fishermen\'s houses, the Lace Museum, the leaning bell tower and risotto di gò. Wonderfully quiet in the evening.',
+     fr:'L\'île la plus colorée de la lagune : maisons de pêcheurs peintes, musée de la Dentelle, campanile penché et risotto di gò. Le soir, un calme merveilleux.',
+     es:'La isla más colorida de la laguna: casas de pescadores pintadas, el Museo del Encaje, el campanario inclinado y el risotto di gò. Por la noche, una calma maravillosa.',
+     zh:'潟湖中最多彩的岛屿：彩色渔民房屋、蕾丝博物馆、斜塔钟楼和虾虎鱼烩饭。傍晚格外宁静。'}},
+ {id:'mazzorbo', wiki:'Mazzorbo', lat:45.4868, lon:12.4085, tags:['quiet','food'], lines:'12', c:['#6E8B5A','#F4C542'],
+  t:{de:'Über eine Holzbrücke mit Burano verbunden: Weinberg, Gemüsegärten und Wiesen am Wasser. Ein grüner Rückzugsort, nur wenige Schritte vom Trubel.',
+     it:'Collegata a Burano da un ponte di legno: vigneto, orti e prati sull\'acqua. Un rifugio verde a pochi passi dal via vai.',
+     en:'Linked to Burano by a wooden bridge: a vineyard, vegetable gardens and meadows by the water. A green retreat just a few steps from the bustle.',
+     fr:'Reliée à Burano par un pont en bois : vigne, potagers et prairies au bord de l\'eau. Un refuge vert à quelques pas de l\'animation.',
+     es:'Unida a Burano por un puente de madera: viñedo, huertos y praderas junto al agua. Un refugio verde a pocos pasos del bullicio.',
+     zh:'通过木桥与布拉诺相连：葡萄园、菜园和水边草地。距离热闹仅几步之遥的绿色静地。'}},
+ {id:'torcello', wiki:'Torcello', lat:45.4975, lon:12.4185, tags:['quiet','art'], lines:'9 (Burano)', c:['#6E8B5A','#1B6CA8'],
+  t:{de:'Hier begann die Geschichte der Lagune: die Kathedrale Santa Maria Assunta mit byzantinischen Mosaiken, Kanäle im Schilf und kaum Bewohner.',
+     it:'Qui è iniziata la storia della laguna: la cattedrale di Santa Maria Assunta con i mosaici bizantini, canali tra le canne e pochissimi abitanti.',
+     en:'Where the lagoon\'s story began: the cathedral of Santa Maria Assunta with Byzantine mosaics, reed-lined canals and hardly any residents.',
+     fr:'Là où commence l\'histoire de la lagune : la cathédrale Santa Maria Assunta et ses mosaïques byzantines, des canaux dans les roseaux et presque pas d\'habitants.',
+     es:'Aquí empezó la historia de la laguna: la catedral de Santa Maria Assunta con mosaicos bizantinos, canales entre juncos y apenas habitantes.',
+     zh:'潟湖历史的起点：拥有拜占庭马赛克的圣母升天大教堂、芦苇间的运河，居民寥寥。'}},
+ {id:'santerasmo', wiki:"Sant'Erasmo", lat:45.452, lon:12.405, tags:['quiet','family','food'], lines:'13', c:['#6E8B5A','#7fcdbb'],
+  t:{de:'Der Gemüsegarten Venedigs: Felder, Feldwege zum Radfahren und die berühmten violetten Artischocken. Ländliche Lagune für Naturfreunde und Familien.',
+     it:'L\'orto di Venezia: campi, strade sterrate da percorrere in bici e il celebre carciofo violetto. Laguna rurale per amanti della natura e famiglie.',
+     en:'Venice\'s vegetable garden: fields, country lanes for cycling and the famous purple artichokes. Rural lagoon life for nature lovers and families.',
+     fr:'Le potager de Venise : champs, chemins à parcourir à vélo et les célèbres artichauts violets. La lagune rurale pour amoureux de nature et familles.',
+     es:'La huerta de Venecia: campos, caminos para ir en bici y las famosas alcachofas violetas. Laguna rural para amantes de la naturaleza y familias.',
+     zh:'威尼斯的菜园：田野、适合骑行的乡间小路和著名的紫色洋蓟。适合自然爱好者与家庭的田园潟湖。'}}
+];
+
+/* ============ BEISPIEL-UNTERKÜNFTE ============ */
+const STAYS = [
+ {id:'blue-lagune', name:'Blue Lagune', island:'burano', url:'https://myburano.com', photo:'blue-lagune.jpg'},
+ {id:'vista-laguna', name:'Vista Laguna', island:'venezia', url:'https://myburano.com', photo:'vista-laguna.jpg'}
+];
+
+/* ============ TEXTE (6 Sprachen) ============ */
+const LANGS = [['de','DE'],['it','IT'],['en','EN'],['fr','FR'],['es','ES'],['zh','中文']];
+const T = {
+de:{nav_islands:'Inseln',nav_map:'Karte',nav_stay:'Unterkünfte',nav_ask:'Anfrage',nav_hosts:'Für Gastgeber',
+ hero_kicker:'Venedig · Burano · Murano · Lido · Torcello',hero_title:'Ferienwohnungen auf den Inseln der Lagune',
+ hero_sub:'Direkt beim Gastgeber anfragen – ohne Portalgebühr. Von der Altstadt Venedigs bis zu den stillen Inseln im Norden.',
+ cta1:'Inseln entdecken',cta2:'Unterkunft anfragen',
+ islands_title:'Die Inseln der Lagune',islands_sub:'Jede Insel hat ihren eigenen Rhythmus. Finden Sie die, die zu Ihrem Urlaub passt.',
+ all:'Alle',tag_beach:'Strand',tag_quiet:'Ruhe',tag_art:'Kunst & Handwerk',tag_family:'Familie',tag_food:'Kulinarik',tag_city:'Stadt',
+ lines:'Vaporetto',hub:'alle Linien',more:'Mehr',ask_here:'Hier anfragen',
+ lines_note:'Linienangaben ohne Gewähr – aktuelle Fahrpläne bei ACTV.',
+ map_title:'Die Lagune auf einen Blick',map_note:'Schematische Karte – tippen Sie auf eine Insel.',
+ stay_title:'Unterkünfte',stay_sub:'Die ersten Gastgeber sind dabei, weitere Unterkünfte folgen laufend.',
+ example:'Beispiel',host_by:'Gastgeber: Familie Fries',view:'Zur Unterkunft',soon:'Weitere Unterkünfte folgen – Gastgeber melden sich gerade an.',
+ ask_title:'Unterkunft anfragen',ask_sub:'Nennen Sie Ihre Wunschinsel und Reisedaten – wir leiten Ihre Anfrage an passende Gastgeber weiter.',
+ f_name:'Ihr Name',f_island:'Insel',f_any:'Egal – Hauptsache Lagune',f_from:'Anreise',f_to:'Abreise',f_guests:'Personen',f_msg:'Nachricht (optional)',
+ send_mail:'Per E-Mail senden',send_wa:'Per WhatsApp senden',copy:'Text kopieren',copied:'Kopiert ✓',
+ f_note:'Kostenlos und unverbindlich. E-Mail:',need_name:'Bitte Ihren Namen eintragen.',
+ m_subj:'Anfrage myVenezia.com',m_hello:'Hallo,',m_req:'ich interessiere mich für eine Unterkunft.',m_bye:'Viele Grüße',
+ host_kicker:'Für Gastgeber',host_title:'Ihre Ferienwohnung in der Lagune – ohne Provision',
+ host_sub:'Werden Sie Teil des neuen Portals für Venedig und seine Inseln: eine eigene Seite für Ihre Unterkunft, Anfragen direkt an Sie.',
+ b1:'0 % Provision – Gästeanfragen kommen direkt zu Ihnen',b2:'Eigene Unterseite auf Ihrer Insel, in sechs Sprachen',
+ b3:'Fotos hochladen – Beschreibungen entstehen mit KI-Unterstützung',b4:'Anfragen per E-Mail oder WhatsApp, Sie behalten die Kontrolle',
+ price_title:'Ihr Eintrag',price_note:'im ersten Jahr, danach 20 € pro Jahr',zero:'0 % Provision',
+ compare:'Zum Vergleich: Große Buchungsportale behalten meist 15–25 % jeder Buchung.',
+ host_cta:'Jetzt vormerken lassen',host_soon:'Die eigene Vermieterseite wird gerade eingerichtet. Lassen Sie sich per E-Mail vormerken – wir melden uns.',
+ h_subj:'Vormerkung Gastgeber myVenezia.com',h_body:'Hallo Familie Fries,\n\nich vermiete eine Unterkunft in der Lagune und möchte mich vormerken lassen.\n\nInsel:\nAnzahl Wohnungen:\nTelefon:\n\nViele Grüße',
+ foot_claim:'Ferienwohnungen auf den Inseln der Lagune von Venedig',foot_burano:'Burano: myburano.com',foot_chronicle:'Geschichte der Lagune: Venice Chronicle',
+ impressum:'Impressum',privacy:'Datenschutz',photo_credit:'Fotos: Wikipedia / Wikimedia Commons (Urheber und Lizenz über den Link am Bild), eigene Fotos folgen.',
+ sig:'Ein friesh-stack Projekt',apps:'Gemacht mit',close:'Schließen',legal_note:''},
+it:{nav_islands:'Isole',nav_map:'Mappa',nav_stay:'Alloggi',nav_ask:'Richiesta',nav_hosts:'Per gli host',
+ hero_kicker:'Venezia · Burano · Murano · Lido · Torcello',hero_title:'Case vacanza sulle isole della laguna',
+ hero_sub:'Richiedi direttamente all\'host, senza commissioni di portale. Dal centro storico di Venezia alle isole silenziose del nord.',
+ cta1:'Scopri le isole',cta2:'Richiedi un alloggio',
+ islands_title:'Le isole della laguna',islands_sub:'Ogni isola ha il suo ritmo. Trova quella giusta per la tua vacanza.',
+ all:'Tutte',tag_beach:'Spiaggia',tag_quiet:'Tranquillità',tag_art:'Arte e artigianato',tag_family:'Famiglia',tag_food:'Gastronomia',tag_city:'Città',
+ lines:'Vaporetto',hub:'tutte le linee',more:'Di più',ask_here:'Richiedi qui',
+ lines_note:'Linee indicative – orari aggiornati su ACTV.',
+ map_title:'La laguna in uno sguardo',map_note:'Mappa schematica – tocca un\'isola.',
+ stay_title:'Alloggi',stay_sub:'I primi host sono già con noi, altri alloggi arriveranno presto.',
+ example:'Esempio',host_by:'Host: famiglia Fries',view:'Vai all\'alloggio',soon:'Altri alloggi in arrivo – gli host si stanno registrando.',
+ ask_title:'Richiedi un alloggio',ask_sub:'Indica l\'isola preferita e le date: inoltriamo la richiesta agli host adatti.',
+ f_name:'Il tuo nome',f_island:'Isola',f_any:'Qualsiasi – basta la laguna',f_from:'Arrivo',f_to:'Partenza',f_guests:'Persone',f_msg:'Messaggio (facoltativo)',
+ send_mail:'Invia per e-mail',send_wa:'Invia su WhatsApp',copy:'Copia testo',copied:'Copiato ✓',
+ f_note:'Gratuito e senza impegno. E-mail:',need_name:'Inserisci il tuo nome.',
+ m_subj:'Richiesta myVenezia.com',m_hello:'Buongiorno,',m_req:'sono interessato/a a un alloggio.',m_bye:'Cordiali saluti',
+ host_kicker:'Per gli host',host_title:'La tua casa vacanza in laguna – senza commissioni',
+ host_sub:'Entra nel nuovo portale di Venezia e delle sue isole: una pagina dedicata al tuo alloggio, richieste direttamente a te.',
+ b1:'0 % di commissione – le richieste arrivano direttamente a te',b2:'Pagina dedicata sulla tua isola, in sei lingue',
+ b3:'Carica le foto – le descrizioni nascono con l\'aiuto dell\'IA',b4:'Richieste via e-mail o WhatsApp, il controllo resta a te',
+ price_title:'La tua inserzione',price_note:'il primo anno, poi 20 € all\'anno',zero:'0 % di commissione',
+ compare:'Per confronto: i grandi portali trattengono di solito il 15–25 % di ogni prenotazione.',
+ host_cta:'Prenota il tuo posto',host_soon:'La pagina dedicata agli host è in preparazione. Lasciaci la tua e-mail – ti ricontatteremo.',
+ h_subj:'Pre-registrazione host myVenezia.com',h_body:'Buongiorno famiglia Fries,\n\naffitto un alloggio in laguna e vorrei pre-registrarmi.\n\nIsola:\nNumero di appartamenti:\nTelefono:\n\nCordiali saluti',
+ foot_claim:'Case vacanza sulle isole della laguna di Venezia',foot_burano:'Burano: myburano.com',foot_chronicle:'Storia della laguna: Venice Chronicle',
+ impressum:'Note legali',privacy:'Privacy',photo_credit:'Foto: Wikipedia / Wikimedia Commons (autore e licenza tramite il link sulla foto), foto proprie in arrivo.',
+ sig:'Un progetto friesh-stack',apps:'Realizzato con',close:'Chiudi',legal_note:'Testo legale in lingua tedesca.'},
+en:{nav_islands:'Islands',nav_map:'Map',nav_stay:'Stays',nav_ask:'Enquiry',nav_hosts:'For hosts',
+ hero_kicker:'Venice · Burano · Murano · Lido · Torcello',hero_title:'Holiday homes on the islands of the lagoon',
+ hero_sub:'Enquire directly with your host – no booking fees. From Venice\'s historic centre to the quiet islands in the north.',
+ cta1:'Discover the islands',cta2:'Send an enquiry',
+ islands_title:'The islands of the lagoon',islands_sub:'Every island has its own rhythm. Find the one that suits your holiday.',
+ all:'All',tag_beach:'Beach',tag_quiet:'Peace',tag_art:'Art & crafts',tag_family:'Family',tag_food:'Food',tag_city:'City',
+ lines:'Vaporetto',hub:'all lines',more:'More',ask_here:'Enquire here',
+ lines_note:'Lines without guarantee – current timetables at ACTV.',
+ map_title:'The lagoon at a glance',map_note:'Schematic map – tap an island.',
+ stay_title:'Stays',stay_sub:'The first hosts are on board, more places are coming.',
+ example:'Example',host_by:'Hosts: the Fries family',view:'View stay',soon:'More stays coming – hosts are signing up right now.',
+ ask_title:'Send an enquiry',ask_sub:'Tell us your preferred island and dates – we pass your enquiry on to suitable hosts.',
+ f_name:'Your name',f_island:'Island',f_any:'Any – as long as it\'s the lagoon',f_from:'Arrival',f_to:'Departure',f_guests:'Guests',f_msg:'Message (optional)',
+ send_mail:'Send by email',send_wa:'Send via WhatsApp',copy:'Copy text',copied:'Copied ✓',
+ f_note:'Free and without obligation. Email:',need_name:'Please enter your name.',
+ m_subj:'myVenezia.com enquiry',m_hello:'Hello,',m_req:'I am interested in a place to stay.',m_bye:'Kind regards',
+ host_kicker:'For hosts',host_title:'Your holiday home in the lagoon – commission-free',
+ host_sub:'Join the new portal for Venice and its islands: your own page for your property, enquiries straight to you.',
+ b1:'0 % commission – guest enquiries come straight to you',b2:'Your own page on your island, in six languages',
+ b3:'Upload photos – descriptions are written with AI support',b4:'Enquiries by email or WhatsApp – you stay in control',
+ price_title:'Your listing',price_note:'in the first year, then €20 per year',zero:'0 % commission',
+ compare:'For comparison: big booking portals usually keep 15–25 % of every booking.',
+ host_cta:'Register your interest',host_soon:'The dedicated host page is being set up. Register your interest by email – we\'ll get back to you.',
+ h_subj:'Host pre-registration myVenezia.com',h_body:'Hello Fries family,\n\nI rent out a property in the lagoon and would like to pre-register.\n\nIsland:\nNumber of apartments:\nPhone:\n\nKind regards',
+ foot_claim:'Holiday homes on the islands of the Venetian lagoon',foot_burano:'Burano: myburano.com',foot_chronicle:'History of the lagoon: Venice Chronicle',
+ impressum:'Legal notice',privacy:'Privacy',photo_credit:'Photos: Wikipedia / Wikimedia Commons (author and licence via the link on the photo), own photos coming soon.',
+ sig:'A friesh-stack project',apps:'Made with',close:'Close',legal_note:'Legal text in German.'},
+fr:{nav_islands:'Îles',nav_map:'Carte',nav_stay:'Logements',nav_ask:'Demande',nav_hosts:'Pour les hôtes',
+ hero_kicker:'Venise · Burano · Murano · Lido · Torcello',hero_title:'Locations de vacances sur les îles de la lagune',
+ hero_sub:'Contactez directement votre hôte – sans frais de plateforme. Du centre historique de Venise aux îles paisibles du nord.',
+ cta1:'Découvrir les îles',cta2:'Faire une demande',
+ islands_title:'Les îles de la lagune',islands_sub:'Chaque île a son propre rythme. Trouvez celle qui convient à vos vacances.',
+ all:'Toutes',tag_beach:'Plage',tag_quiet:'Calme',tag_art:'Art et artisanat',tag_family:'Famille',tag_food:'Gastronomie',tag_city:'Ville',
+ lines:'Vaporetto',hub:'toutes les lignes',more:'Plus',ask_here:'Demander ici',
+ lines_note:'Lignes sans garantie – horaires actuels sur ACTV.',
+ map_title:'La lagune en un coup d\'œil',map_note:'Carte schématique – touchez une île.',
+ stay_title:'Logements',stay_sub:'Les premiers hôtes sont là, d\'autres logements arrivent.',
+ example:'Exemple',host_by:'Hôtes : famille Fries',view:'Voir le logement',soon:'D\'autres logements arrivent – les hôtes s\'inscrivent en ce moment.',
+ ask_title:'Faire une demande',ask_sub:'Indiquez votre île préférée et vos dates – nous transmettons votre demande aux hôtes adaptés.',
+ f_name:'Votre nom',f_island:'Île',f_any:'Peu importe – du moment que c\'est la lagune',f_from:'Arrivée',f_to:'Départ',f_guests:'Personnes',f_msg:'Message (facultatif)',
+ send_mail:'Envoyer par e-mail',send_wa:'Envoyer via WhatsApp',copy:'Copier le texte',copied:'Copié ✓',
+ f_note:'Gratuit et sans engagement. E-mail :',need_name:'Veuillez indiquer votre nom.',
+ m_subj:'Demande myVenezia.com',m_hello:'Bonjour,',m_req:'je suis intéressé(e) par un logement.',m_bye:'Cordialement',
+ host_kicker:'Pour les hôtes',host_title:'Votre location dans la lagune – sans commission',
+ host_sub:'Rejoignez le nouveau portail de Venise et de ses îles : une page dédiée à votre logement, les demandes directement chez vous.',
+ b1:'0 % de commission – les demandes arrivent directement chez vous',b2:'Votre propre page sur votre île, en six langues',
+ b3:'Téléchargez vos photos – les descriptions sont rédigées avec l\'aide de l\'IA',b4:'Demandes par e-mail ou WhatsApp – vous gardez le contrôle',
+ price_title:'Votre annonce',price_note:'la première année, puis 20 € par an',zero:'0 % de commission',
+ compare:'À titre de comparaison : les grandes plateformes prennent généralement 15 à 25 % de chaque réservation.',
+ host_cta:'Se préinscrire',host_soon:'La page dédiée aux hôtes est en préparation. Préinscrivez-vous par e-mail – nous vous recontacterons.',
+ h_subj:'Préinscription hôte myVenezia.com',h_body:'Bonjour famille Fries,\n\nje loue un logement dans la lagune et souhaite me préinscrire.\n\nÎle :\nNombre de logements :\nTéléphone :\n\nCordialement',
+ foot_claim:'Locations de vacances sur les îles de la lagune de Venise',foot_burano:'Burano : myburano.com',foot_chronicle:'Histoire de la lagune : Venice Chronicle',
+ impressum:'Mentions légales',privacy:'Confidentialité',photo_credit:'Photos : Wikipédia / Wikimedia Commons (auteur et licence via le lien sur la photo), nos propres photos arrivent.',
+ sig:'Un projet friesh-stack',apps:'Réalisé avec',close:'Fermer',legal_note:'Texte juridique en allemand.'},
+es:{nav_islands:'Islas',nav_map:'Mapa',nav_stay:'Alojamientos',nav_ask:'Consulta',nav_hosts:'Para anfitriones',
+ hero_kicker:'Venecia · Burano · Murano · Lido · Torcello',hero_title:'Apartamentos vacacionales en las islas de la laguna',
+ hero_sub:'Consulta directamente con el anfitrión, sin comisiones de portal. Desde el centro histórico de Venecia hasta las tranquilas islas del norte.',
+ cta1:'Descubrir las islas',cta2:'Enviar consulta',
+ islands_title:'Las islas de la laguna',islands_sub:'Cada isla tiene su propio ritmo. Encuentra la que encaja con tus vacaciones.',
+ all:'Todas',tag_beach:'Playa',tag_quiet:'Tranquilidad',tag_art:'Arte y artesanía',tag_family:'Familia',tag_food:'Gastronomía',tag_city:'Ciudad',
+ lines:'Vaporetto',hub:'todas las líneas',more:'Más',ask_here:'Consultar aquí',
+ lines_note:'Líneas sin garantía – horarios actuales en ACTV.',
+ map_title:'La laguna de un vistazo',map_note:'Mapa esquemático – toca una isla.',
+ stay_title:'Alojamientos',stay_sub:'Los primeros anfitriones ya están aquí, pronto habrá más alojamientos.',
+ example:'Ejemplo',host_by:'Anfitriones: familia Fries',view:'Ver alojamiento',soon:'Más alojamientos en camino – los anfitriones se están registrando.',
+ ask_title:'Enviar consulta',ask_sub:'Indica tu isla preferida y tus fechas: enviamos tu consulta a los anfitriones adecuados.',
+ f_name:'Tu nombre',f_island:'Isla',f_any:'Cualquiera – lo importante es la laguna',f_from:'Llegada',f_to:'Salida',f_guests:'Personas',f_msg:'Mensaje (opcional)',
+ send_mail:'Enviar por e-mail',send_wa:'Enviar por WhatsApp',copy:'Copiar texto',copied:'Copiado ✓',
+ f_note:'Gratis y sin compromiso. E-mail:',need_name:'Introduce tu nombre.',
+ m_subj:'Consulta myVenezia.com',m_hello:'Hola:',m_req:'me interesa un alojamiento.',m_bye:'Un saludo',
+ host_kicker:'Para anfitriones',host_title:'Tu apartamento en la laguna, sin comisiones',
+ host_sub:'Únete al nuevo portal de Venecia y sus islas: una página propia para tu alojamiento y las consultas directamente para ti.',
+ b1:'0 % de comisión: las consultas te llegan directamente',b2:'Página propia en tu isla, en seis idiomas',
+ b3:'Sube tus fotos: las descripciones se crean con ayuda de IA',b4:'Consultas por e-mail o WhatsApp: tú mantienes el control',
+ price_title:'Tu anuncio',price_note:'el primer año, después 20 € al año',zero:'0 % de comisión',
+ compare:'Para comparar: los grandes portales suelen quedarse con el 15–25 % de cada reserva.',
+ host_cta:'Apuntarme ya',host_soon:'La página para anfitriones se está preparando. Apúntate por e-mail y te contactaremos.',
+ h_subj:'Preinscripción anfitrión myVenezia.com',h_body:'Hola, familia Fries:\n\nalquilo un alojamiento en la laguna y me gustaría preinscribirme.\n\nIsla:\nNúmero de apartamentos:\nTeléfono:\n\nUn saludo',
+ foot_claim:'Apartamentos vacacionales en las islas de la laguna de Venecia',foot_burano:'Burano: myburano.com',foot_chronicle:'Historia de la laguna: Venice Chronicle',
+ impressum:'Aviso legal',privacy:'Privacidad',photo_credit:'Fotos: Wikipedia / Wikimedia Commons (autor y licencia en el enlace de la foto), pronto fotos propias.',
+ sig:'Un proyecto friesh-stack',apps:'Hecho con',close:'Cerrar',legal_note:'Texto legal en alemán.'},
+zh:{nav_islands:'岛屿',nav_map:'地图',nav_stay:'住宿',nav_ask:'咨询',nav_hosts:'房东专区',
+ hero_kicker:'威尼斯 · 布拉诺 · 穆拉诺 · 丽都 · 托切罗',hero_title:'威尼斯潟湖群岛度假公寓',
+ hero_sub:'直接向房东咨询，无平台费用。从威尼斯历史城区到北部宁静的小岛。',
+ cta1:'探索岛屿',cta2:'咨询住宿',
+ islands_title:'潟湖中的岛屿',islands_sub:'每座岛屿都有自己的节奏，找到最适合您假期的那一座。',
+ all:'全部',tag_beach:'海滩',tag_quiet:'宁静',tag_art:'艺术与手工艺',tag_family:'家庭',tag_food:'美食',tag_city:'城市',
+ lines:'水上巴士',hub:'所有线路',more:'更多',ask_here:'在此咨询',
+ lines_note:'线路仅供参考，最新时刻表请查看 ACTV。',
+ map_title:'潟湖一览',map_note:'示意地图——点击岛屿查看。',
+ stay_title:'住宿',stay_sub:'首批房东已经加入，更多住宿即将上线。',
+ example:'示例',host_by:'房东：Fries 一家',view:'查看住宿',soon:'更多住宿即将上线——房东正在陆续注册。',
+ ask_title:'咨询住宿',ask_sub:'告诉我们您想去的岛屿和日期，我们会将咨询转给合适的房东。',
+ f_name:'您的姓名',f_island:'岛屿',f_any:'不限——只要在潟湖',f_from:'入住',f_to:'退房',f_guests:'人数',f_msg:'留言（可选）',
+ send_mail:'通过电子邮件发送',send_wa:'通过 WhatsApp 发送',copy:'复制文本',copied:'已复制 ✓',
+ f_note:'免费且无约束。电子邮件：',need_name:'请填写您的姓名。',
+ m_subj:'myVenezia.com 住宿咨询',m_hello:'您好，',m_req:'我想咨询住宿。',m_bye:'此致问候',
+ host_kicker:'房东专区',host_title:'您在潟湖的度假公寓——零佣金',
+ host_sub:'加入威尼斯及其岛屿的全新平台：为您的房源打造专属页面，咨询直接发给您。',
+ b1:'0% 佣金——客人咨询直接发送给您',b2:'在您所在岛屿拥有专属页面，支持六种语言',
+ b3:'上传照片——借助人工智能生成房源描述',b4:'通过电子邮件或 WhatsApp 接收咨询，一切由您掌控',
+ price_title:'您的房源登记',price_note:'首年费用，之后每年 20 €',zero:'0% 佣金',
+ compare:'对比：大型预订平台通常从每笔预订中抽取 15–25% 的佣金。',
+ host_cta:'立即预先登记',host_soon:'房东专属页面正在建设中。请通过电子邮件预先登记，我们会与您联系。',
+ h_subj:'myVenezia.com 房东预先登记',h_body:'Fries 一家您好：\n\n我在潟湖出租房源，希望预先登记。\n\n岛屿：\n公寓数量：\n电话：\n\n此致问候',
+ foot_claim:'威尼斯潟湖群岛度假公寓',foot_burano:'布拉诺：myburano.com',foot_chronicle:'潟湖历史：Venice Chronicle',
+ impressum:'法律声明',privacy:'隐私政策',photo_credit:'照片：维基百科 / 维基共享资源（作者与许可见照片链接），自有照片即将上线。',
+ sig:'friesh-stack 项目',apps:'制作工具',close:'关闭',legal_note:'法律文本为德语版本。'}
+};
+const NAMES = {venezia:{de:'Venedig',it:'Venezia',en:'Venice',fr:'Venise',es:'Venecia',zh:'威尼斯'},
+ giudecca:{zh:'朱代卡'},lido:{zh:'丽都'},pellestrina:{zh:'佩莱斯特里纳'},murano:{zh:'穆拉诺'},burano:{zh:'布拉诺'},
+ mazzorbo:{zh:'马佐尔博'},torcello:{zh:'托切罗'},santerasmo:{zh:'圣伊拉斯莫'}};
+const DEF_NAMES = {venezia:'Venezia',giudecca:'Giudecca',lido:'Lido',pellestrina:'Pellestrina',murano:'Murano',burano:'Burano',mazzorbo:'Mazzorbo',torcello:'Torcello',santerasmo:"Sant'Erasmo"};
+const STAY_DESC = {
+ 'blue-lagune':{de:'Ferienwohnung auf Burano, mitten zwischen den bunten Häusern.',it:'Casa vacanza a Burano, tra le case colorate.',en:'Holiday home on Burano, among the colourful houses.',fr:'Location de vacances à Burano, parmi les maisons colorées.',es:'Apartamento vacacional en Burano, entre las casas de colores.',zh:'位于布拉诺彩色房屋之间的度假公寓。'},
+ 'vista-laguna':{de:'Ferienwohnung in Venedig.',it:'Casa vacanza a Venezia.',en:'Holiday home in Venice.',fr:'Location de vacances à Venise.',es:'Apartamento vacacional en Venecia.',zh:'位于威尼斯的度假公寓。'}
+};
+
+/* ============ LOGIK ============ */
+let lang = 'de', filter = 'all';
+const $ = s => document.querySelector(s);
+const t = k => (T[lang] && T[lang][k] != null) ? T[lang][k] : T.de[k];
+const iname = id => (NAMES[id] && NAMES[id][lang]) || DEF_NAMES[id];
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+function pickLang(){
+  const saved = store.get('lagunabnb_lang');
+  if (saved && T[saved]) return saved;
+  const n = (navigator.language||'de').slice(0,2).toLowerCase();
+  return T[n] ? n : 'en';
+}
+
+/* Fotos: 1. eigenes Foto (fotos/<id>.jpg) → 2. Wikipedia-Titelbild → 3. Farbverlauf */
+const imgCache = {};
+function tryImage(src){ return new Promise(res=>{ const i=new Image(); i.onload=()=>res(src); i.onerror=()=>res(null); i.src=src; }); }
+async function wikiImage(title){
+  if (title in imgCache) return imgCache[title];
+  let out = null;
+  try{
+    const ss = sessionStorage.getItem('wimg_'+title);
+    if (ss) { out = JSON.parse(ss); imgCache[title]=out; return out; }
+  }catch(e){}
+  try{
+    const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title.replace(/ /g,'_')));
+    if (r.ok){
+      const j = await r.json();
+      let src = j.thumbnail && j.thumbnail.source;
+      const orig = j.originalimage && j.originalimage.source;
+      if (src && !/\.svg/i.test(orig||'')){
+        src = src.replace(/\/\d+px-/, '/900px-');
+        const file = decodeURIComponent((orig||src).split('/').pop());
+        out = {src, credit:'https://commons.wikimedia.org/wiki/File:'+encodeURIComponent(file)};
+      }
+    }
+  }catch(e){}
+  imgCache[title]=out;
+  try{ sessionStorage.setItem('wimg_'+title, JSON.stringify(out)); }catch(e){}
+  return out;
+}
+async function fillPhoto(el, own, wikiTitle){
+  if (own){ const ok = await tryImage(CONFIG.photoFolder+own); if (ok){ el.style.backgroundImage=`url("${ok}")`; el.classList.add('has'); el.querySelector('.cr')?.remove(); return; } }
+  if (!wikiTitle) return;
+  const w = await wikiImage(wikiTitle);
+  if (!w) return;
+  const ok = await tryImage(w.src);
+  if (!ok) return;
+  el.style.backgroundImage = `url("${ok}")`; el.classList.add('has');
+  const cr = el.querySelector('.cr'); if (cr){ cr.href = w.credit; cr.textContent = '© Wikimedia'; }
+}
+function photoBox(island, own, label){
+  const d = document.createElement('div');
+  d.className='ph'; d.style.setProperty('--c1',island.c[0]); d.style.setProperty('--c2',island.c[1]);
+  d.innerHTML = `<a class="cr" target="_blank" rel="noopener"></a><div class="nm">${label}</div>`;
+  fillPhoto(d, own, island.wiki);
+  return d;
+}
+
+function renderStatic(){
+  document.documentElement.lang = lang === 'zh' ? 'zh-Hans' : lang;
+  document.querySelectorAll('[data-t]').forEach(el => el.textContent = t(el.dataset.t));
+  $('#langs').innerHTML = LANGS.map(([k,l]) => `<button class="${k===lang?'on':''}" data-l="${k}">${l}</button>`).join('');
+  $('#mailShow').textContent = CONFIG.email;
+  $('#sendWa').style.display = CONFIG.whatsapp ? '' : 'none';
+  $('#hostMail').href = `mailto:${CONFIG.hostEmail}?subject=${encodeURIComponent(t('h_subj'))}&body=${encodeURIComponent(t('h_body'))}`;
+}
+
+function renderFilters(){
+  const keys = ['all','beach','quiet','art','family','food','city'];
+  $('#filters').innerHTML = keys.map(k => `<button class="chip ${k===filter?'on':''}" data-f="${k}">${k==='all'?t('all'):t('tag_'+k)}</button>`).join('');
+}
+
+function islandCard(isl){
+  const c = document.createElement('article'); c.className='card';
+  c.appendChild(photoBox(isl, isl.id+'.jpg', iname(isl.id)));
+  const b = document.createElement('div'); b.className='body';
+  b.innerHTML = `<div class="tags">${isl.tags.map(x=>`<span class="tag">${t('tag_'+x)}</span>`).join('')}</div>
+    <p>${isl.t[lang]||isl.t.de}</p>
+    <div class="meta">⛴ ${t('lines')}: <b>${isl.lines==='hub'?t('hub'):isl.lines}</b></div>
+    <a class="btn ghost" href="#anfrage" data-ask="${isl.id}">${t('ask_here')} →</a>`;
+  c.appendChild(b);
+  c.querySelector('.ph').style.cursor='pointer';
+  c.querySelector('.ph').addEventListener('click',()=>openIsland(isl.id));
+  return c;
+}
+function renderIslands(){
+  const g = $('#islandGrid'); g.innerHTML='';
+  ISLANDS.filter(i => filter==='all' || i.tags.includes(filter)).forEach(i => g.appendChild(islandCard(i)));
+}
+
+function renderStays(){
+  const g = $('#stayGrid'); g.innerHTML='';
+  STAYS.forEach(s=>{
+    const isl = ISLANDS.find(i=>i.id===s.island);
+    const c = document.createElement('article'); c.className='card stay';
+    c.appendChild(photoBox(isl, s.photo, s.name));
+    const b = document.createElement('div'); b.className='body';
+    b.innerHTML = `<div class="tags"><span class="tag">${iname(isl.id)}</span><span class="tag" style="background:color-mix(in srgb,var(--brand-2) 35%,transparent);color:#6a5000">${t('example')}</span></div>
+      <p>${(STAY_DESC[s.id]||{})[lang]||STAY_DESC[s.id].de}</p>
+      <div class="meta">${t('host_by')}</div>
+      <a class="btn primary" href="${s.url}" target="_blank" rel="noopener">${t('view')} →</a>`;
+    c.appendChild(b); g.appendChild(c);
+  });
+  const soon = document.createElement('div'); soon.className='soon'; soon.textContent = t('soon'); g.appendChild(soon);
+}
+
+/* Schematische Karte */
+const BOX = {latMin:45.255, latMax:45.515, lonMin:12.255, lonMax:12.475, w:360, h:520};
+const px = (lat,lon) => [ (lon-BOX.lonMin)/(BOX.lonMax-BOX.lonMin)*BOX.w, (BOX.latMax-lat)/(BOX.latMax-BOX.latMin)*BOX.h ];
+function renderMap(){
+  const P = (a,b)=>px(a,b).map(v=>v.toFixed(1)).join(',');
+  const lido = `M${P(45.432,12.392)} L${P(45.40,12.372)} L${P(45.37,12.345)} L${P(45.338,12.318)}`;
+  const pel  = `M${P(45.330,12.312)} L${P(45.30,12.305)} L${P(45.265,12.298)}`;
+  const main = `M0,0 L${P(45.515,12.325)} Q${P(45.47,12.30)} ${P(45.45,12.255)} L0,${px(45.40,12.255)[1].toFixed(1)} Z`;
+  let s = `<rect width="360" height="520" fill="var(--water)"/>
+    <path d="${main}" fill="#cfd8c4" opacity=".9"/>
+    <rect x="${px(45.5,12.475)[0]-60}" y="0" width="60" height="520" fill="#9cc9e6" opacity=".55"/>
+    <text x="345" y="300" transform="rotate(90 345 300)" font-family="Inter" font-size="12" fill="#2b5876" opacity=".8">ADRIA · ADRIATICO</text>
+    <path d="${lido}" stroke="#e6d9b0" stroke-width="9" stroke-linecap="round" fill="none"/>
+    <path d="${pel}" stroke="#e6d9b0" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <text x="14" y="40" font-family="Inter" font-size="11" fill="#4c5a3e">Mestre</text>`;
+  ISLANDS.forEach(i=>{
+    const [x,y] = px(i.lat,i.lon);
+    const right = !['mazzorbo','giudecca','pellestrina'].includes(i.id);
+    s += `<g class="dot" data-id="${i.id}" tabindex="0"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7"/>
+      <text x="${(x+(right?11:-11)).toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${right?'start':'end'}">${iname(i.id)}</text></g>`;
+  });
+  $('#mapSvg').innerHTML = s;
+}
+function selectOnMap(id){
+  document.querySelectorAll('.map .dot').forEach(d=>d.classList.toggle('on', d.dataset.id===id));
+  const i = ISLANDS.find(x=>x.id===id);
+  $('#mapInfo').innerHTML = `<h2>${iname(id)}</h2><div class="tags" style="margin-bottom:10px">${i.tags.map(x=>`<span class="tag">${t('tag_'+x)}</span>`).join('')}</div>
+    <p>${i.t[lang]||i.t.de}</p><div class="meta">⛴ ${t('lines')}: <b>${i.lines==='hub'?t('hub'):i.lines}</b></div>
+    <div class="btns"><button class="btn ghost" data-open="${id}">${t('more')}</button><a class="btn primary" href="#anfrage" data-ask="${id}">${t('ask_here')} →</a></div>`;
+}
+
+function openIsland(id){
+  const i = ISLANDS.find(x=>x.id===id);
+  const body = $('#modalBody'); body.innerHTML='';
+  body.appendChild(photoBox(i, i.id+'.jpg', iname(id)));
+  const d = document.createElement('div'); d.className='in';
+  d.innerHTML = `<div class="tags" style="margin-bottom:10px">${i.tags.map(x=>`<span class="tag">${t('tag_'+x)}</span>`).join('')}</div>
+    <p>${i.t[lang]||i.t.de}</p><p class="meta">⛴ ${t('lines')}: <b>${i.lines==='hub'?t('hub'):i.lines}</b></p>
+    <a class="btn primary" href="#anfrage" data-ask="${id}">${t('ask_here')} →</a>`;
+  body.appendChild(d); $('#modal').classList.add('open');
+}
+function openLegal(which){
+  const imp = `<h2>Impressum</h2><p><em>${t('legal_note')}</em></p>
+   <h3>Anbieter / Gestore del sito</h3><p>Anne Fries<br>Terranova 112<br>30142 Burano (VE)<br>Italien</p>
+   <h3>Kontakt</h3><p>E-Mail: info@myvenezia.com</p>
+   <h3>Verantwortlich für den Inhalt</h3><p>Anne Fries, Anschrift wie oben.</p>
+   <h3>Haftung für Links</h3><p>Diese Seite enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.</p>
+   <h3>Bildnachweise</h3><p>Inselfotos werden aus Wikipedia / Wikimedia Commons geladen; Urheber und Lizenz sind über den Link „© Wikimedia“ am jeweiligen Bild abrufbar.</p>
+   <h3>Streitschlichtung</h3><p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>`;
+  const priv = `<h2>Datenschutzerklärung</h2><p><em>${t('legal_note')}</em></p>
+   <h3>Verantwortlicher</h3><p>Anne Fries, Terranova 112, 30142 Burano (VE), Italien, E-Mail: info@myvenezia.com</p>
+   <h3>Hosting</h3><p>Diese Website wird über GitHub Pages (GitHub Inc., USA) bereitgestellt. Beim Aufruf werden technisch notwendige Daten (z. B. IP-Adresse, Zeitpunkt, Browser) in Server-Logfiles verarbeitet (Art. 6 Abs. 1 lit. f DSGVO).</p>
+   <h3>Anfragen</h3><p>Das Anfrageformular speichert keine Daten auf unserem Server. Es öffnet Ihr E-Mail-Programm bzw. WhatsApp mit vorbereitetem Text; erst wenn Sie dort absenden, erhalten wir Ihre Angaben. Wir nutzen sie ausschließlich zur Bearbeitung Ihrer Anfrage und geben sie nur an die betreffenden Gastgeber weiter (Art. 6 Abs. 1 lit. b DSGVO).</p>
+   <h3>Externe Inhalte</h3><p>Schriften werden von Google Fonts (Google Ireland Ltd.) geladen, Inselfotos von Wikipedia/Wikimedia (Wikimedia Foundation, USA). Dabei wird Ihre IP-Adresse an diese Anbieter übermittelt.</p>
+   <h3>Lokale Speicherung</h3><p>Ihre Sprachwahl wird nur in Ihrem Browser (localStorage) gespeichert.</p>
+   <h3>Ihre Rechte</h3><p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch sowie auf Beschwerde bei einer Datenschutz-Aufsichtsbehörde.</p>`;
+  $('#modalBody').innerHTML = `<div class="in legal">${which==='imp'?imp:priv}</div>`;
+  $('#modal').classList.add('open');
+}
+function closeModal(){ $('#modal').classList.remove('open'); }
+
+function fillIslandSelect(sel){
+  const s = $('#fIsland'); const cur = sel || s.value || 'any';
+  s.innerHTML = `<option value="any">${t('f_any')}</option>` + ISLANDS.map(i=>`<option value="${i.id}">${iname(i.id)}</option>`).join('');
+  s.value = cur;
+}
+function fmtDate(v){ if(!v) return '–'; try{ return new Date(v+'T12:00').toLocaleDateString(lang==='zh'?'zh-CN':lang); }catch(e){ return v; } }
+function buildMsg(){
+  const name = $('#fName').value.trim();
+  if (!name){ toast(t('need_name')); $('#fName').focus(); return null; }
+  const isl = $('#fIsland').value; const islTxt = isl==='any' ? t('f_any') : iname(isl);
+  const msg = $('#fMsg').value.trim();
+  return `${t('m_hello')}\n\n${t('m_req')}\n\n${t('f_island')}: ${islTxt}\n${t('f_from')}: ${fmtDate($('#fFrom').value)}\n${t('f_to')}: ${fmtDate($('#fTo').value)}\n${t('f_guests')}: ${$('#fGuests').value}` + (msg?`\n\n${msg}`:'') + `\n\n${t('m_bye')}\n${name}`;
+}
+function showPreview(txt){ const p=$('#preview'); p.textContent=txt; p.style.display='block'; }
+function toast(m){ const el=$('#toast'); el.textContent=m; el.style.display='block'; clearTimeout(toast._t); toast._t=setTimeout(()=>el.style.display='none',2200); }
+
+function houses(){
+  const cols = ['#D9534F','#F4C542','#1B6CA8','#6E8B5A','#E8833A','#8E5BA8','#2BA3A3','#F28CA0','#F4C542','#D9534F','#1B6CA8','#6E8B5A'];
+  let x=0, out='', k=0;
+  while (x < 1200){
+    const w = 70 + (k*37)%45, h = 70 + (k*53)%60, c = cols[k%cols.length];
+    const y = 160-h;
+    out += `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`;
+    out += `<rect x="${x}" y="${y}" width="${w}" height="6" fill="#ffffff" opacity=".35"/>`;
+    const cols2 = Math.max(2, Math.floor(w/28));
+    for (let r=0;r<Math.floor((h-30)/32);r++) for (let q=0;q<cols2;q++){
+      const wx = x + 10 + q*((w-20)/cols2) + 2, wy = y + 16 + r*32;
+      out += `<rect x="${wx.toFixed(1)}" y="${wy}" width="12" height="18" rx="2" fill="#2a3a4a" opacity=".55"/><rect x="${(wx-3).toFixed(1)}" y="${wy}" width="3" height="18" fill="#1d6b4e" opacity=".7"/>`;
+    }
+    out += `<rect x="${(x+w/2-9).toFixed(1)}" y="138" width="18" height="22" rx="2" fill="#3a2a1a" opacity=".7"/>`;
+    if (k===4){ out += `<rect x="${x+w+4}" y="18" width="22" height="142" fill="#e7dccb"/><path d="M${x+w+2} 18 L${x+w+15} 0 L${x+w+28} 18 Z" fill="#8a6e4a"/>`; x+=30; }
+    x += w; k++;
+  }
+  $('#houseRow').innerHTML = out;
+}
+
+function renderAll(){ renderStatic(); renderFilters(); renderIslands(); renderStays(); renderMap(); fillIslandSelect(); }
+
+document.addEventListener('click', e=>{
+  const l = e.target.closest('[data-l]'); if (l){ lang=l.dataset.l; store.set('lagunabnb_lang',lang); renderAll(); return; }
+  const f = e.target.closest('[data-f]'); if (f){ filter=f.dataset.f; renderFilters(); renderIslands(); return; }
+  const a = e.target.closest('[data-ask]'); if (a){ closeModal(); fillIslandSelect(a.dataset.ask); return; }
+  const o = e.target.closest('[data-open]'); if (o){ openIsland(o.dataset.open); return; }
+  const d = e.target.closest('.map .dot'); if (d){ selectOnMap(d.dataset.id); return; }
+  if (e.target.id==='modal' || e.target.id==='closeModal'){ closeModal(); }
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); if(e.key==='Enter' && e.target.closest && e.target.closest('.map .dot')) selectOnMap(e.target.closest('.map .dot').dataset.id); });
+$('#openImp').addEventListener('click', e=>{ e.preventDefault(); openLegal('imp'); });
+$('#openPriv').addEventListener('click', e=>{ e.preventDefault(); openLegal('priv'); });
+$('#sendMail').addEventListener('click', ()=>{ const m=buildMsg(); if(!m) return; showPreview(m); location.href=`mailto:${CONFIG.email}?subject=${encodeURIComponent(t('m_subj'))}&body=${encodeURIComponent(m)}`; });
+$('#sendWa').addEventListener('click', ()=>{ const m=buildMsg(); if(!m) return; showPreview(m); const a=document.createElement('a'); a.href=`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(m)}`; a.target='_blank'; a.rel='noopener'; document.body.appendChild(a); a.click(); a.remove(); });
+$('#copyMsg').addEventListener('click', async ()=>{ const m=buildMsg(); if(!m) return; showPreview(m); try{ await navigator.clipboard.writeText(m); toast(t('copied')); }catch(e){ toast('↓'); } });
+$('#fFrom').addEventListener('change', ()=>{ if($('#fFrom').value && (!$('#fTo').value || $('#fTo').value <= $('#fFrom').value)){ const d=new Date($('#fFrom').value+'T12:00'); d.setDate(d.getDate()+7); $('#fTo').value=d.toISOString().slice(0,10);} });
+
+lang = pickLang();
+houses();
+renderAll();
+</script>
 </body>
 </html>
